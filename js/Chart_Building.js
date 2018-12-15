@@ -490,14 +490,11 @@ for (var i = 0; i < btnGroup.length; i++)
 		if (itemBtn == 'Trinkets')
 		{
 			wcp_charts.updateTrinketChart(talentsBtn+itemBtn+fightBtn);
-			console.log("loading " + talentsBtn+itemBtn+fightBtn);
 		}
 		else
 		{
 			wcp_charts.updateTraitChart(talentsBtn+itemBtn+fightBtn);
-			console.log("loading " + talentsBtn+itemBtn+fightBtn);
 		}
-		console.log("loading " + talentsBtn+itemBtn+fightBtn);
 	})
 }
 
