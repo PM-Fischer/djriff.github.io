@@ -176,6 +176,9 @@ WCP_Chart.prototype.updateTrinketChart = function(chartName) {
 	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
 		var sortedItems = [];
 		var dpsSortedData = data["sorted_data_keys"];
+		while (this.chart.series.length > 0){
+			this.chart.series[0].remove(false);
+		}
 		this.chart.update({
 			xAxis: {
 				categories: dpsSortedData,
@@ -243,16 +246,22 @@ WCP_Chart.prototype.updateTrinketChart = function(chartName) {
 		document.getElementById(this.chartId).style.height = 200 + dpsSortedData.length * 30 + "px";
 		this.chart.setSize(document.getElementById(this.chartId).style.width, document.getElementById(this.chartId).style.height);
 		//this.chart.renderTo(this.chartId);
+		
 		this.chart.redraw();
+		
+
 	}.bind(this)).fail(function(){
 		console.log("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
 	});
 };
 
 WCP_Chart.prototype.updateTraitChart = function(chartName) {
-	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/traits_"+ this.options.charts[chartName].src + ".json", function(data) {
+	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
 		let sortedItems = [];
 		let dpsSortedData = data["sorted_data_keys"];
+		while (this.chart.series.length > 0){
+			this.chart.series[0].remove(false);
+		}
 		this.chart.update({
 			xAxis: {
 				categories: dpsSortedData,
@@ -315,8 +324,9 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 		}
 		document.getElementById(this.chartId).style.height = 200 + dpsSortedData.length * 30 + "px";
 		this.chart.setSize(document.getElementById(this.chartId).style.width, document.getElementById(this.chartId).style.height);
-		this.chart.renderTo(this.chartId);
+		//this.chart.renderTo(this.chartId);
 		this.chart.redraw();
+			
 	}.bind(this)).fail(function(){
 		console.log("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
 	});
@@ -339,11 +349,16 @@ WCP_Chart.prototype.buildButtons = function() {
     parent.parentNode.insertBefore(container, parent);
 };
 
-var tabClicked = function(event) {
+WCP_Chart.prototype.changeChart = function(event) {
+	
+}
+
+WCP_Chart.prototype.tabClicked = function(event) {
     var chartName = event.target;
+    console.log(chartName);
     if (this.options.charts[chartName].type == 'trinket'){
             this.updateTrinketChart(chartName); // Setup the initial chart
-        } else if (this.options.charts[chartName].type == 'azerite-trat') {
+        } else if (this.options.charts[chartName].type == 'azerite-trait') {
             this.updateTraitChart(chartName); // Setup the initial chart
     }
 };
@@ -367,16 +382,20 @@ talentDiv.setAttribute("class","tab");
 //Talent Buttons
 //DA
 var DABtn = document.createElement("BUTTON");
-DABtn.setAttribute("id", "DABtn");
+DABtn.setAttribute("id", "talent");
 DABtn.setAttribute("class", "button");
+DABtn.setAttribute("onClick", "talentClick('DA')");
+//DABtn.setAttribute("onClick", "wcp_charts.tabClicked(this.id)");
 var DAText = document.createTextNode("Dark Ascension");
 DABtn.appendChild(DAText);
 document.body.appendChild(talentDiv);
 talentDiv.appendChild(DABtn)
 //LotV
 var LotVBtn = document.createElement("BUTTON");
-LotVBtn.setAttribute("id", "LotvBtn");
+LotVBtn.setAttribute("id", "talent");
 LotVBtn.setAttribute("class", "button");
+LotVBtn.setAttribute("onClick", "talentClick('LotV')");
+//LotVBtn.setAttribute("onClick", "wcp_charts.tabClicked(this.id)");
 var LotVText = document.createTextNode("Legacy of the Void");
 LotVBtn.appendChild(LotVText);
 document.body.appendChild(talentDiv);
@@ -394,6 +413,7 @@ document.body.appendChild(TrinketTraitDiv);
 var TrinketBtn = document.createElement("BUTTON");
 TrinketBtn.setAttribute("id", "TrinketBtn");
 TrinketBtn.setAttribute("class", "button");
+TrinketBtn.setAttribute("onClick", "itemClick('Trinkets')");
 var TrinketText = document.createTextNode("Trinket");
 TrinketBtn.appendChild(TrinketText);
 TrinketTraitDiv.appendChild(TrinketBtn)
@@ -401,6 +421,7 @@ TrinketTraitDiv.appendChild(TrinketBtn)
 var TraitBtn = document.createElement("BUTTON");
 TraitBtn.setAttribute("id", "TraitBtn");
 TraitBtn.setAttribute("class", "button");
+TraitBtn.setAttribute("onClick", "itemClick('Traits')");
 var TraitText = document.createTextNode("Azerite Trait");
 TraitBtn.appendChild(TraitText);
 TrinketTraitDiv.appendChild(TraitBtn)
@@ -418,6 +439,7 @@ document.body.appendChild(fightStyleDiv);
 var compositeBtn = document.createElement("BUTTON");
 compositeBtn.setAttribute("id", "CompositeBtn");
 compositeBtn.setAttribute("class", "button");
+compositeBtn.setAttribute("onClick", "fightClick('C')");
 var compositeText = document.createTextNode("Composite");
 compositeBtn.appendChild(compositeText);
 fightStyleDiv.appendChild(compositeBtn)
@@ -425,6 +447,7 @@ fightStyleDiv.appendChild(compositeBtn)
 var singleTargetBtn = document.createElement("BUTTON");
 singleTargetBtn.setAttribute("id", "SingletTargetBtn");
 singleTargetBtn.setAttribute("class", "button");
+singleTargetBtn.setAttribute("onClick", "fightClick('ST')");
 var singleTargetText = document.createTextNode("Single Target");
 singleTargetBtn.appendChild(singleTargetText);
 fightStyleDiv.appendChild(singleTargetBtn)
@@ -432,100 +455,51 @@ fightStyleDiv.appendChild(singleTargetBtn)
 var dungeonBtn = document.createElement("BUTTON");
 dungeonBtn.setAttribute("id", "DungeonBtn");
 dungeonBtn.setAttribute("class", "button");
+dungeonBtn.setAttribute("onClick", "fightClick('D')");
 var dungeonText = document.createTextNode("Dungeon");
 dungeonBtn.appendChild(dungeonText);
 fightStyleDiv.appendChild(dungeonBtn)
 
 
-//Array of all the buttons
-//var btnArray = ['DABtn', 'LotvBtn', 'TrinketBtn', 'TraitBtn', 'CompositeBtn', 'SingletTargetBtn', 'DungeonBtn'];
-
+//Set vars for btns
 var btnGroup = document.getElementsByClassName("button");
+var talentsBtn = 'DA';
+var itemBtn = 'Trinkets';
+var fightBtn = 'C';
 //let chartToBuild = "DA-Trinket-C";
 
-for(var i = 0;i<btnGroup.length;i++){
+function talentClick(clicked)
+{
+	talentsBtn = clicked;
+}
+
+function itemClick(clicked)
+{
+	itemBtn = clicked;
+}
+
+function fightClick(clicked)
+{
+	fightBtn = clicked;
+}
+
+for (var i = 0; i < btnGroup.length; i++)
+{
+
 	btnGroup[i].addEventListener("click",function(){
-		var current = document.getElementsByClassName("active");
-		if (current.length > 0){
-			current[0].className = current[0].className.replace(" active", "");
+		if (itemBtn == 'Trinkets')
+		{
+			wcp_charts.updateTrinketChart(talentsBtn+itemBtn+fightBtn);
+			console.log("loading " + talentsBtn+itemBtn+fightBtn);
 		}
-		this.className += " active";
-
-		testOne = chartGettingOne(current);
-		testTwo = chartGettingTwo(current);
-		testThree = chartGettingThree(current);
-		
-		testVar = testOne + "-" + testTwo + "-" + testThree;
-		
-
-		console.log(testVar);
-	});
-}
-
-
-function chartGettingOne(current){
-	var chartToBuild = "DA-Trinket-Comp";
-	//var tempVar = chartToBuild;
-	var tempVar, tempOne, tempTwo, tempThree;
-	
-	//Handle cases for button presses
-	//Talents
-	if (current[0].id == "DABtn"){
-		tempOne = "DA";
-	}
-	else if (current[0].id == "LotVBtn") {
-		tempOne = "LotV";
-	}
-	return tempOne;
-}
-
-function chartGettingTwo(current){
-	var chartToBuild = "DA-Trinket-Comp";
-	//var tempVar = chartToBuild;
-	var tempVar, tempOne, tempTwo, tempThree;
-	//Trinket / Traits
-	if (current[0].id == "TrinketBtn"){
-		tempTwo = "Trinket";
-	}
-	else{
-		tempTwo = "Trait";
-	}
-	return tempTwo;
-}
-function chartGettingThree(current){
-	var chartToBuild = "DA-Trinket-Comp";
-	//var tempVar = chartToBuild;
-	var tempVar, tempOne, tempTwo, tempThree;
-	//Fight Styles		
-	if (current[0].id == "CompositeBtn"){
-		tempThree = "Comp";
-	}
-	else if (current[0].id == "SingletTargetBtn"){
-		tempThree = "ST";
-	}
-	else {
-		tempThree = "Dung";
-	}
-	return tempThree;
-}
-
-/*
-		//Trinkets
-		'DATrinketsC' : { type: 'trinket', src: 'trinkets_DA_C', title: 'Trinkets - Dark Ascension - Composite' },
-		'DATrinketsST' : { type: 'trinket', src: 'trinkets_DA_ST', title: 'Trinkets - Dark Ascension - Single Target'},
-		'DATrinketsD'  : { type: 'trinket', src: 'trinkets_DA_D', title: 'Trinkets - Dark Ascension - Dungeon'},
-		'LotVTrinketsC' : { type: 'trinket', src: 'trinkets_LotV_C', title: 'Trinkets - Legacy of the Void - Composite' },
-		'LotVTrinketsST' : { type: 'trinket', src: 'trinkets_LotV_ST', title: 'Trinkets - Legacy of the Void - Single Target'},
-		'LotVTrinketsD'  : { type: 'trinket', src: 'trinkets_LotV_D', title: 'Trinkets - Legacy of the Void - Dungeon'},
-		//Traits
-		'DATraitsC' : { type: 'trait', src: 'traits_DA_C', title: 'Azerite Traits - Dark Ascension - Composite' },
-		'DATraitsST' : { type: 'trait', src: 'traits_DA_ST', title: 'Azerite Traits - Dark Ascension - Single Target'},
-		'DATraitsD'  : { type: 'trait', src: 'traits_DA_D', title: 'Azerite Traits - Dark Ascension - Dungeon'},
-		'LotVTraitsC' : { type: 'trait', src: 'traits_LotV_C', title: 'Azerite Traits - Legacy of the Void - Composite' },
-		'LotVTraitsST' : { type: 'trait', src: 'traits_LotV_ST', title: 'Azerite Traits - Legacy of the Void - Single Target'},
-		'LotVTraitsD'  : { type: 'trait', src: 'traits_LotV_D', title: 'Azerite Traits - Legacy of the Void - Dungeon'},
+		else
+		{
+			wcp_charts.updateTraitChart(talentsBtn+itemBtn+fightBtn);
+			console.log("loading " + talentsBtn+itemBtn+fightBtn);
 		}
-*/
+		console.log("loading " + talentsBtn+itemBtn+fightBtn);
+	})
+}
 
 
 
@@ -562,14 +536,7 @@ var LotVTraitTab_D = createTabs("LotV-Trait-Tab-Dungeon");
 
 var DATrinketsCTest = createTabs("DATrinketsC");
 
-var tabClicked = function(event) {
-    var chartName = event.target;
-    if (this.options.charts[chartName].type == 'trinket'){
-            this.updateTrinketChart(chartName); // Setup the initial chart
-        } else if (this.options.charts[chartName].type == 'azerite-trat') {
-            this.updateTraitChart(chartName); // Setup the initial chart
-    }
-};
+
 
 
 
