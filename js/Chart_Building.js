@@ -378,13 +378,16 @@ Button Layout:
 //Main Div
 var talentDiv = document.createElement("div");
 talentDiv.setAttribute("id", "talent-div");
-talentDiv.setAttribute("class","tab");
+talentDiv.setAttribute("class","tabcontent");
+
 //Talent Buttons
 //DA
 var DABtn = document.createElement("BUTTON");
-DABtn.setAttribute("id", "talent");
+DABtn.setAttribute("id", "DABtn");
 DABtn.setAttribute("class", "button");
 DABtn.setAttribute("onClick", "talentClick('DA')");
+
+
 //DABtn.setAttribute("onClick", "wcp_charts.tabClicked(this.id)");
 var DAText = document.createTextNode("Dark Ascension");
 DABtn.appendChild(DAText);
@@ -392,7 +395,7 @@ document.body.appendChild(talentDiv);
 talentDiv.appendChild(DABtn)
 //LotV
 var LotVBtn = document.createElement("BUTTON");
-LotVBtn.setAttribute("id", "talent");
+LotVBtn.setAttribute("id", "LotvBtn");
 LotVBtn.setAttribute("class", "button");
 LotVBtn.setAttribute("onClick", "talentClick('LotV')");
 //LotVBtn.setAttribute("onClick", "wcp_charts.tabClicked(this.id)");
@@ -400,6 +403,8 @@ var LotVText = document.createTextNode("Legacy of the Void");
 LotVBtn.appendChild(LotVText);
 document.body.appendChild(talentDiv);
 talentDiv.appendChild(LotVBtn)
+
+
 
 
 //Trinket/Trait div's
@@ -461,12 +466,15 @@ dungeonBtn.appendChild(dungeonText);
 fightStyleDiv.appendChild(dungeonBtn)
 
 
+
+
+
 //Set vars for btns
 var btnGroup = document.getElementsByClassName("button");
 var talentsBtn = 'DA';
 var itemBtn = 'Trinkets';
 var fightBtn = 'C';
-//let chartToBuild = "DA-Trinket-C";
+
 
 function talentClick(clicked)
 {
@@ -498,7 +506,37 @@ for (var i = 0; i < btnGroup.length; i++)
 	})
 }
 
+var divs = document.getElementsByClassName("tabcontent")
 
+//Style Divs
+function styleDivs(){
+	for (var i = 0; i < divs.length; i++)
+	{
+		let divClass = document.getElementById(divs[i].id)
+		divClass.style.textAlign = "center";
+	}
+
+}
+
+//Style Buttons
+function styleButtons(){
+	for(var i = 0; i< btnGroup.length; i++)
+	{
+		let btn = document.getElementById(btnGroup[i].id)
+		
+		btn.style.backgroundColor = default_background_color;
+		btn.style.color = "white";
+		btn.style.padding = "15px 32px";
+		btn.style.textAlign = "center";
+		btn.style.fontSize = "16px";
+		btn.style.display = "inline-block";
+		btn.style.justifyContent = "center";
+		btn.style.borderColor = "white";
+
+	}
+}
+styleDivs();
+styleButtons();
 
 //Tab Function
 function createTabs(tabID){
