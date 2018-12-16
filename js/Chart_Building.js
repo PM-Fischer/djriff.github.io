@@ -252,6 +252,7 @@ WCP_Chart.prototype.updateTrinketChart = function(chartName) {
 
 	}.bind(this)).fail(function(){
 		console.log("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
+		alert("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
 	});
 };
 
@@ -329,6 +330,7 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 			
 	}.bind(this)).fail(function(){
 		console.log("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
+		alert("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
 	});
 };
 
@@ -514,6 +516,8 @@ function styleDivs(){
 	{
 		let divClass = document.getElementById(divs[i].id)
 		divClass.style.textAlign = "center";
+		divClass.style.paddingBottom = "5px";
+		divClass.style.paddingRight = "5px";
 	}
 
 }
@@ -526,6 +530,7 @@ function styleButtons(){
 		
 		btn.style.backgroundColor = default_background_color;
 		btn.style.color = "white";
+		btn.style.border = "1px solid white"
 		btn.style.padding = "15px 32px";
 		btn.style.textAlign = "center";
 		btn.style.fontSize = "16px";
