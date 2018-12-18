@@ -86,6 +86,12 @@ var WCP_Chart = function WCP_Chart(id, options) {
             }
         },
         yAxis: {
+        	crosshair: {
+        		color: 'white',
+        		width: 3,
+        		snap: false,
+        		zIndex: 10
+        	},
             labels: {
                 style: {
                     color: default_font_color
@@ -105,36 +111,6 @@ var WCP_Chart = function WCP_Chart(id, options) {
                 color: default_font_color
             }
         },
-        tooltip: {
-            useHTML: true,
-            headerFormat: '<span style="font-size: 14px"><b>{point.key}</b></span><br/>',
-            pointFormat: '<span style=color: "{point.color}"><b>{series.name}</b></span>: <b>{point.y}</b><br/>',
-            padding: 5,
-            //shared: true
-           
-            /*
-            formatter: function() {
-                var s = '<div style="margin: -4px -6px -11px -7px; padding: 3px 3px 6px 3px; background-color:';
-                s += dark_color;
-                s += '"><div style=\"margin-left: 9px; margin-right: 9px; margin-bottom: 6px; font-weight: 700;\">' + this.x + '</div>'
-                var cumulativeAmount = 0;
-                for (var i = this.points.length -1; i >= 0; i--) {
-                    cumulativeAmount += this.points[i].y;
-                    if(this.points[i].y != 0) {
-                        s += '<div><span style=\"margin-left: 9px; border-left: 9px solid ' +
-                            this.points[i].series.color + ';' +
-                            ' padding-left: 4px;' +
-                            '\">' +
-                            this.points[i].series.name +
-                            '</span>:&nbsp;&nbsp;' +
-                            Intl.NumberFormat().format(cumulative_amount);
-                            s+='dps';
-                    }
-                }
-                s+= '</div>';
-                return s;
-                */
-            },
         legend: {
             layout: 'vertical',
             align: 'right',
@@ -226,8 +202,61 @@ WCP_Chart.prototype.updateTrinketChart = function(chartName) {
 					fontWeight: 'bold'
 					},
 				text: this.options.charts[chartName].title
-				}
-		});
+				},
+			tooltip: {
+        	shared: true,
+            useHTML: true,
+            headerFormat: "<b>(point.x)</b>",	//'<span style="font-size: 14px"><b>{point.key}</b></span><br/>',
+            style: {
+            	color: default_font_color,
+        	},
+            pointFormat: '<span style=color: "{point.color}"><b>{series.name}</b></span>: <b>{point.y}</b><br/>',
+            padding: 5,
+            //shared: true
+           
+            
+            formatter: function() {
+                var s = '<div style="margin: -4px -6px -11px -7px; padding: 3px 3px 6px 3px; background-color:';
+                s += dark_color;
+                s += '"><div style=\"margin-left: 9px; margin-right: 9px; margin-bottom: 6px; font-weight: 700;\">' + this.x + '</div>'
+                var baseAmount = data["data"]["Base"]["300"];
+                var cumulativeAmount = 0 + baseAmount;
+                for (var i = this.points.length -1; i >= 0; i--) {
+                    cumulativeAmount += this.points[i].y;
+                    if(this.points[i].y != 0) {
+                        s += '<div><span style=\"margin-left: 9px; border-left: 9px solid ' +
+                            this.points[i].series.color + ';' +
+                            ' padding-left: 4px;' +
+                            '\">' +
+                            this.points[i].series.name +
+                            '</span>:&nbsp;&nbsp;' +
+                            Intl.NumberFormat().format(cumulativeAmount - baseAmount);
+                            s+=' dps';
+                            s+= ' - ';
+                            let percentage = (cumulativeAmount/baseAmount*100-100).toFixed(2);
+                            s+= percentage;
+                            if (percentage > 0)
+                            {
+                            	s+= '% (Increase)';
+                            }
+                            else
+                            {
+                            	s+= '% (decrease)';
+                            }
+                            
+                            
+
+
+                    }
+                }
+                s+= '</div>';
+                return s;
+               },
+                
+            },
+
+		})
+
 		let itemLevels = data["simulated_steps"];
 		for (currIlevel of itemLevels)
 			{
@@ -342,7 +371,58 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 					fontWeight: 'bold'
 					},
 				text: this.options.charts[chartName].title
-				}
+				},
+			tooltip: {
+        	shared: true,
+            useHTML: true,
+            headerFormat: "<b>(point.x)</b>",	//'<span style="font-size: 14px"><b>{point.key}</b></span><br/>',
+            style: {
+            	color: default_font_color,
+        	},
+            pointFormat: '<span style=color: "{point.color}"><b>{series.name}</b></span>: <b>{point.y}</b><br/>',
+            padding: 5,
+            //shared: true
+           
+            
+            formatter: function() {
+                var s = '<div style="margin: -4px -6px -11px -7px; padding: 3px 3px 6px 3px; background-color:';
+                s += dark_color;
+                s += '"><div style=\"margin-left: 9px; margin-right: 9px; margin-bottom: 6px; font-weight: 700;\">' + this.x + '</div>'
+                var baseAmount = data["data"]["Base"]["1_stack"];
+                var cumulativeAmount = 0 + baseAmount;
+                for (var i = this.points.length -1; i >= 0; i--) {
+                    cumulativeAmount += this.points[i].y;
+                    if(this.points[i].y != 0) {
+                        s += '<div><span style=\"margin-left: 9px; border-left: 9px solid ' +
+                            this.points[i].series.color + ';' +
+                            ' padding-left: 4px;' +
+                            '\">' +
+                            this.points[i].series.name +
+                            '</span>:&nbsp;&nbsp;' +
+                            Intl.NumberFormat().format(cumulativeAmount - baseAmount);
+                            s+=' dps';
+                            s+= ' - ';
+                            let percentage = (cumulativeAmount/baseAmount*100-100).toFixed(2);
+                            s+= percentage;
+                            if (percentage > 0)
+                            {
+                            	s+= '% (Increase)';
+                            }
+                            else
+                            {
+                            	s+= '% (decrease)';
+                            }
+                            
+                            
+
+
+                    }
+                }
+                s+= '</div>';
+                return s;
+               },
+                
+            },
 		});
 		for (let stackCount of [3,2,1])
 		{
