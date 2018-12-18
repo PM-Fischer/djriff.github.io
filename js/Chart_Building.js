@@ -544,7 +544,6 @@ DABtn.setAttribute("id", "DABtn");
 DABtn.setAttribute("class", "button");
 DABtn.setAttribute("onClick", "talentClick('DA')");
 
-
 //DABtn.setAttribute("onClick", "wcp_charts.tabClicked(this.id)");
 var DAText = document.createTextNode("Dark Ascension");
 DABtn.appendChild(DAText);
@@ -692,6 +691,8 @@ function styleButtons(){
 		btn.style.display = "inline-block";
 		btn.style.justifyContent = "center";
 		btn.style.borderColor = "white";
+		btn.style.cursor = 'pointer';
+
 
 	}
 }
