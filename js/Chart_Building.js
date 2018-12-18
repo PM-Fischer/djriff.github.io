@@ -72,6 +72,7 @@ var WCP_Chart = function WCP_Chart(id, options) {
         },
         xAxis: {
             labels: {
+            	useHTML: true,
                 style: {
                     color: default_font_color,
                     fontWeight: 'bold',
@@ -186,12 +187,36 @@ WCP_Chart.prototype.updateTrinketChart = function(chartName) {
 	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
 		var sortedItems = [];
 		var dpsSortedData = data["sorted_data_keys"];
+		var wowheadTooltips = [];
+		for (dpsName of dpsSortedData)
+		{
+			truncatedName = dpsName.trim()
+			dpsName = dpsName.replace(/ /g,'_');
+			itemID = data["item_ids"][dpsName];
+			chartLink = "";
+			chartLink += "<div style=\"display:inline-block; margin-bottom:-3px\">";
+			chartLink += "<a style=\"color: white; font-size: 16px; padding: 3px;\" href=#";
+			chartLink += " rel=\"https://www.wowhead.com/item=";
+			chartLink += itemID;
+			chartLink += "/"
+			chartLink += dpsName.trim().replace(/ /g,'_');
+			chartLink += "\" target=\"blank\"";
+			chartLink += " class=\"chart_link\"";
+			chartLink += ">";
+			chartLink += dpsName.trim();
+			chartLink += "</a>";
+			chartLink += "</div>";
+
+			//Push link into array
+			wowheadTooltips.push(chartLink);
+		}
 		while (this.chart.series.length > 0){
 			this.chart.series[0].remove(false);
 		}
 		this.chart.update({
 			xAxis: {
-				categories: dpsSortedData,
+				categories: wowheadTooltips,
+				useHTML: true,
 			},
 			title: {
 				style: {
@@ -273,12 +298,11 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 		let wowheadTooltips = [];
 		for (dpsName of dpsSortedData)
 		{
-//<tspan class="highcharts-anchor" onclick="location.href=&quot;https://www.wowhead.com/spell=278661/Chorus-of-Insanity&quot;" style="cursor: pointer;">Chorus of Insanity </tspan>
 			truncatedName = dpsName.trim()
 			spellID = data["spell_ids"][dpsName];
 			chartLink = "";
 			chartLink += "<div style=\"display:inline-block; margin-bottom:-3px\">";
-			chartLink += "<a href=#";
+			chartLink += "<a style=\"color: white; font-size: 16px;\" href=#";
 			chartLink += " rel=\"https://www.wowhead.com/spell=";
 			chartLink += spellID;
 			chartLink += "/"
@@ -289,39 +313,16 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 			chartLink += dpsName.trim();
 			chartLink += "</a>";
 			chartLink += "</div>";
-			//console.log(chartLink);
 			//Push link into array
 			wowheadTooltips.push(chartLink);
 		}
-		let testLinks = {};
-		for (dpsName of dpsSortedData)
-		{
-			for (w of wowheadTooltips)
-			{
-				
-				if(w.includes(dpsName.trim()))
-				{
-					var stringName = toString(dpsName);
-					testLinks[stringName] = w;
-				}
-				
-			}
-		}
-		console.log(testLinks);
 		while (this.chart.series.length > 0){
 			this.chart.series[0].remove(false);
 		}
 		this.chart.update({
 			xAxis: {
 				categories: wowheadTooltips,
-				labels: {
-					formatter: function() {
-						var s = '<div style="margin: -4px -6px -11px -7px; padding: 3px 3px 6px 3px; background-color:';
-						s += '"><div class=\"anti-icon-space\" style=\"margin-left: 9px;margin-bottom: 6px; font-weight: 700;\">' + wowheadTooltips[this.value] + '</div>';
-						console.log(s)
-						return s;
-					}
-				}
+				useHTML: true,				
 			},
 			title: {
 				style: {
