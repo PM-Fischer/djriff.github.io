@@ -190,12 +190,14 @@ WCP_Chart.prototype.updateTrinketChart = function(chartName) {
 		var wowheadTooltips = [];
 		for (dpsName of dpsSortedData)
 		{
+			chartLink = "";
 			truncatedName = dpsName.trim()
 			dpsName = dpsName.replace(/ /g,'_');
 			itemID = data["item_ids"][dpsName];
 			chartLink = "";
 			chartLink += "<div style=\"display:inline-block; margin-bottom:-3px\">";
-			chartLink += "<a style=\"color: white; font-size: 16px; padding: 3px;\" href=#";
+			chartLink += "<a style=\"color: white; font-size: 16px; padding: 3px; cursor: default\" href=#";
+			chartLink += " onclick=\"return false\"";
 			chartLink += " rel=\"https://www.wowhead.com/item=";
 			chartLink += itemID;
 			chartLink += "/"
@@ -283,6 +285,11 @@ WCP_Chart.prototype.updateTrinketChart = function(chartName) {
 		//this.chart.renderTo(this.chartId);
 		
 		this.chart.redraw();
+		try {
+			$WowheadPower.refreshLinks();
+				} 
+		catch (error) {
+  				console.log(error);}
 		
 
 	}.bind(this)).fail(function(){
@@ -295,14 +302,16 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
 		let sortedItems = [];
 		let dpsSortedData = data["sorted_data_keys"];
-		let wowheadTooltips = [];
+		var wowheadTooltipsTraits = [];
 		for (dpsName of dpsSortedData)
 		{
+			chartLink = "";
 			truncatedName = dpsName.trim()
 			spellID = data["spell_ids"][dpsName];
 			chartLink = "";
 			chartLink += "<div style=\"display:inline-block; margin-bottom:-3px\">";
 			chartLink += "<a style=\"color: white; font-size: 16px;\" href=#";
+			chartLink += " onclick=\"return false\"";
 			chartLink += " rel=\"https://www.wowhead.com/spell=";
 			chartLink += spellID;
 			chartLink += "/"
@@ -314,15 +323,18 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 			chartLink += "</a>";
 			chartLink += "</div>";
 			//Push link into array
-			wowheadTooltips.push(chartLink);
+			wowheadTooltipsTraits.push(chartLink);
 		}
 		while (this.chart.series.length > 0){
 			this.chart.series[0].remove(false);
 		}
 		this.chart.update({
 			xAxis: {
-				categories: wowheadTooltips,
-				useHTML: true,				
+				categories: wowheadTooltipsTraits,
+				useHTML: true,
+				labels: {
+					x: -30,
+				},
 			},
 			title: {
 				style: {
