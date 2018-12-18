@@ -67,7 +67,8 @@ var WCP_Chart = function WCP_Chart(id, options) {
                 	legendItemClick: function () {
           				return false;
           			}
-                }
+                },
+                allowPointSelect: false
             }
         },
         xAxis: {
@@ -125,7 +126,7 @@ var WCP_Chart = function WCP_Chart(id, options) {
             x: 0,
             y: 0,
             title: {
-                text: "Click to hide/show series.",
+                text: "Item Level",
                 style:
                     {
                     color:light_color,
@@ -196,6 +197,11 @@ WCP_Chart.prototype.updateTrinketChart = function(chartName) {
 				categories: wowheadTooltips,
 				useHTML: true,
 			},
+			legend: {
+            title: {
+                text: "Item Level"
+            	}
+        	},
 			title: {
 				style: {
 					color: default_font_color,
@@ -212,9 +218,6 @@ WCP_Chart.prototype.updateTrinketChart = function(chartName) {
         	},
             pointFormat: '<span style=color: "{point.color}"><b>{series.name}</b></span>: <b>{point.y}</b><br/>',
             padding: 5,
-            //shared: true
-           
-            
             formatter: function() {
                 var s = '<div style="margin: -4px -6px -11px -7px; padding: 3px 3px 6px 3px; background-color:';
                 s += dark_color;
@@ -372,6 +375,11 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 					},
 				text: this.options.charts[chartName].title
 				},
+			legend: {
+            title: {
+                text: "Stack Count"
+            	}
+        	},
 			tooltip: {
         	shared: true,
             useHTML: true,
@@ -544,6 +552,7 @@ DABtn.setAttribute("id", "DABtn");
 DABtn.setAttribute("class", "button");
 DABtn.setAttribute("onClick", "talentClick('DA')");
 
+
 //DABtn.setAttribute("onClick", "wcp_charts.tabClicked(this.id)");
 var DAText = document.createTextNode("Dark Ascension");
 DABtn.appendChild(DAText);
@@ -572,7 +581,7 @@ document.body.appendChild(TrinketTraitDiv);
 //Trinket / Trait Buttons
 //Trinket
 var TrinketBtn = document.createElement("BUTTON");
-TrinketBtn.setAttribute("id", "TrinketBtn");
+TrinketBtn.setAttribute("id", "TrinketsBtn");
 TrinketBtn.setAttribute("class", "button");
 TrinketBtn.setAttribute("onClick", "itemClick('Trinkets')");
 var TrinketText = document.createTextNode("Trinket");
@@ -580,7 +589,7 @@ TrinketBtn.appendChild(TrinketText);
 TrinketTraitDiv.appendChild(TrinketBtn)
 //Trait
 var TraitBtn = document.createElement("BUTTON");
-TraitBtn.setAttribute("id", "TraitBtn");
+TraitBtn.setAttribute("id", "TraitsBtn");
 TraitBtn.setAttribute("class", "button");
 TraitBtn.setAttribute("onClick", "itemClick('Traits')");
 var TraitText = document.createTextNode("Azerite Trait");
@@ -598,7 +607,7 @@ document.body.appendChild(fightStyleDiv);
 //Fight Style Buttons
 //Composite
 var compositeBtn = document.createElement("BUTTON");
-compositeBtn.setAttribute("id", "CompositeBtn");
+compositeBtn.setAttribute("id", "CBtn");
 compositeBtn.setAttribute("class", "button");
 compositeBtn.setAttribute("onClick", "fightClick('C')");
 var compositeText = document.createTextNode("Composite");
@@ -606,7 +615,7 @@ compositeBtn.appendChild(compositeText);
 fightStyleDiv.appendChild(compositeBtn)
 //Single Target
 var singleTargetBtn = document.createElement("BUTTON");
-singleTargetBtn.setAttribute("id", "SingletTargetBtn");
+singleTargetBtn.setAttribute("id", "STBtn");
 singleTargetBtn.setAttribute("class", "button");
 singleTargetBtn.setAttribute("onClick", "fightClick('ST')");
 var singleTargetText = document.createTextNode("Single Target");
@@ -614,7 +623,7 @@ singleTargetBtn.appendChild(singleTargetText);
 fightStyleDiv.appendChild(singleTargetBtn)
 //Dungeon
 var dungeonBtn = document.createElement("BUTTON");
-dungeonBtn.setAttribute("id", "DungeonBtn");
+dungeonBtn.setAttribute("id", "DBtn");
 dungeonBtn.setAttribute("class", "button");
 dungeonBtn.setAttribute("onClick", "fightClick('D')");
 var dungeonText = document.createTextNode("Dungeon");
@@ -635,16 +644,60 @@ var fightBtn = 'C';
 function talentClick(clicked)
 {
 	talentsBtn = clicked;
+	clickedID = clicked + 'Btn';
+	var talents = document.getElementById('talent-div').children;
+	for(i = 0; i< talents.length; i++)
+	{
+		console.log(talents[i].id);
+		if (talents[i].id.toLowerCase() == clickedID.toLowerCase())
+		{
+			talents[i].style.borderColor = 'blue';
+			console.log("match")
+		}
+		else
+		{
+			talents[i].style.borderColor = 'white';
+		}
+	}
 }
 
 function itemClick(clicked)
 {
 	itemBtn = clicked;
+	clickedID = clicked + 'Btn';
+	console.log(clickedID);
+	var trinketTraits = document.getElementById('Trinket-Trait-div').children;
+	for(i = 0; i< trinketTraits.length; i++)
+	{
+		console.log(trinketTraits[i].id);
+		if (trinketTraits[i].id.toLowerCase() == clickedID.toLowerCase())
+		{
+			trinketTraits[i].style.borderColor = 'blue';
+		}
+		else
+		{
+			trinketTraits[i].style.borderColor = 'white';
+		}
+	}
 }
 
 function fightClick(clicked)
 {
 	fightBtn = clicked;
+	clickedID = clicked + 'Btn';
+	var fight = document.getElementById('Fight-Style-div').children;
+	for(i = 0; i< fight.length; i++)
+	{
+		console.log(fight[i].id);
+		if (fight[i].id.toLowerCase() == clickedID.toLowerCase())
+		{
+			fight[i].style.borderColor = 'blue';
+		}
+		else
+		{
+			fight[i].style.borderColor = 'white';
+		}
+	}
 }
 
 for (var i = 0; i < btnGroup.length; i++)
@@ -690,7 +743,14 @@ function styleButtons(){
 		btn.style.fontSize = "16px";
 		btn.style.display = "inline-block";
 		btn.style.justifyContent = "center";
-		btn.style.borderColor = "white";
+		if (btn.id == 'DABtn' || btn.id == 'TrinketsBtn' || btn.id == 'CBtn')
+		{
+			btn.style.borderColor = "blue";
+		}
+		else
+		{
+			btn.style.borderColor = "white";
+		}
 		btn.style.cursor = 'pointer';
 
 
