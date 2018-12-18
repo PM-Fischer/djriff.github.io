@@ -342,7 +342,7 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 			spellID = data["spell_ids"][dpsName];
 			chartLink = "";
 			chartLink += "<div style=\"display:inline-block; margin-bottom:-3px\">";
-			chartLink += "<a style=\"color: white; font-size: 16px;\" href=#";
+			chartLink += "<a style=\"color: white; font-size: 16px; padding: 3px; cursor: default\" href=#";
 			chartLink += " onclick=\"return false\"";
 			chartLink += " rel=\"https://www.wowhead.com/spell=";
 			chartLink += spellID;
