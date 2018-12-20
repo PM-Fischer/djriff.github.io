@@ -65,7 +65,13 @@ function addTrinketMenu(){
 	generateTrinketMenu(number);
 }
 
-
+var addTrinket = document.createElement("button");
+addTrinket.setAttribute("id", "add-trinket");
+addTrinket.setAttribute("class", "add-trinket");
+addTrinket.setAttribute("onclick", "addTrinketMenu()");
+var addTrinketText = document.createTextNode("+");
+addTrinket.appendChild(addTrinketText);
+mainDiv.appendChild(addTrinket);
 
 function displayTrinkets(trinketID)
 {
