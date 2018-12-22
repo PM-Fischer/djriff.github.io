@@ -19,12 +19,34 @@ const dark_color = "#343a40";
 */
 
 //Create Div which holds all buttons
+var setupDiv = document.createElement("div");
+setupDiv.setAttribute("id", "setup-div");
+document.body.appendChild(setupDiv);
+
+//Add Talent Setups
+var talentDiv = document.createElement("div");
+talentDiv.setAttribute("id", "talent-div");
+talentDiv.setAttribute("class", "dropdown");
+setupDiv.appendChild(talentDiv);
+
+var talentBtn = document.createElement("button");
+talentBtn.setAttribute("id", "talentbtn");
+talentBtn.setAttribute("class", "dropbtn");
+var talentText = document.createTextNode("Select Talent");
+talentDiv.appendChild(talentText);
+
+
 var mainDiv = document.createElement("div");
 mainDiv.setAttribute("id", "main-div");
 mainDiv.setAttribute("class", "main");
 document.body.appendChild(mainDiv);
 
+
+
 number = 0
+
+
+
 
 function generateTrinketMenu(number){
 	//Create Div which holds trinkets dropdown
@@ -215,6 +237,11 @@ function updateIlvlText(click)
 	let newilvlBtn = ilvlDropDownParent.childNodes[3].childNodes[0];
 	newilvlBtn.nodeValue = click;
 	addIlvlDropdown(ilvlDropDownParent);
+	chart = document.getElementById("chart-div");
+	if (chart.classList.contains('chart-div-show') == false)
+		chart.classList.toggle("chart-div-show");
+	addTrinketChart(ilvlDropDownParent);
+
 
 	//Remove all the ilvls.
 	while (ilvlDropDownElement.firstChild) 
@@ -237,102 +264,115 @@ window.onclick = function(event) {
 }
 
 var chartOptions = {
-        chart: {
-            renderTo: this.chartId,
-            type: 'bar',
-            backgroundColor: default_background_color
+    chart: {
+        renderTo: this.chartId,
+        type: 'bar',
+        backgroundColor: default_background_color
+        },
+    title: {
+        style: {
+            color: default_font_color,
+            fontWeight: 'bold'
             },
-        title: {
+        text: "Trinket Comparison - Dark Ascension"
+        },
+    plotOptions: {
+        series: {
+            stacking: 'normal',
+            dataLabels: {
+                align: 'right',
+                enabled: false,
+                pointFormat: "Value: {point.y:,.0f} mm"
+            },
+            enableMouseTracking: true,
+            pointWidth: 15,
+            spacing: 20,
+            events: {
+            	legendItemClick: function () {
+      				return false;
+      			}
+            },
+            allowPointSelect: false
+        }
+    },
+    xAxis: {
+        labels: {
+        	useHTML: true,
             style: {
                 color: default_font_color,
-                fontWeight: 'bold'
-                },
-            text: "Trinket Comparison - Dark Ascension"
-            },
-        plotOptions: {
-            series: {
-                stacking: 'normal',
-                dataLabels: {
-                    align: 'right',
-                    enabled: false,
-                    pointFormat: "Value: {point.y:,.0f} mm"
-                },
-                enableMouseTracking: true,
-                pointWidth: 15,
-                spacing: 20,
+                fontWeight: 'bold',
+                fontSize: 14,
                 events: {
                 	legendItemClick: function () {
           				return false;
-          			}
-                },
-                allowPointSelect: false
+      				}
+            	},
             }
-        },
-        xAxis: {
-            labels: {
-            	useHTML: true,
-                style: {
-                    color: default_font_color,
-                    fontWeight: 'bold',
-                    fontSize: 14,
-                    events: {
-	                	legendItemClick: function () {
-	          				return false;
-          				}
-                	},
-                }
-            }
-        },
-        yAxis: {
-        	crosshair: {
-        		color: 'white',
-        		width: 3,
-        		snap: false,
-        		zIndex: 10
-        	},
-            labels: {
-                style: {
-                    color: default_font_color
-                }
-            },
-            stackLabels: {
-                enabled: true,
-                style: {
-                    fontWeight: 'bold',
-                    color: default_font_color,
-                    fontSize: 14
-                }
-            },
-            gridLineColor: '#616c77',
-            title: {
-                text: 'Damage Per Second',
+        }
+    },
+    yAxis: {
+    	crosshair: {
+    		color: 'white',
+    		width: 3,
+    		snap: false,
+    		zIndex: 10
+    	},
+        labels: {
+            style: {
                 color: default_font_color
             }
         },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            borderColor: medium_color,
-            borderWidth: 1,
-            floating: false,
-            itemMarginBottom: 3,
-            itemMaginTop: 0,
-            reversed: true,
-            shadow: false,
-            verticalAlign: 'middle',
-            x: 0,
-            y: 0,
-            title: {
-                text: "Item Level",
-                style:
-                    {
-                    color:light_color,
-                    fontWeight:'bold',
-                },
-            },
-        itemStyle: {
-            color: default_font_color,
-            fontWeight: 'bold',
-            },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'bold',
+                color: default_font_color,
+                fontSize: 14
+            }
+        },
+        gridLineColor: '#616c77',
+        title: {
+            text: 'Damage Per Second',
+            color: default_font_color
         }
-    };
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        borderColor: medium_color,
+        borderWidth: 1,
+        floating: false,
+        itemMarginBottom: 3,
+        itemMaginTop: 0,
+        reversed: true,
+        shadow: false,
+        verticalAlign: 'middle',
+        x: 0,
+        y: 0,
+        title: {
+            text: "Item Level",
+            style:
+                {
+                color:light_color,
+                fontWeight:'bold',
+            },
+        },
+    itemStyle: {
+        color: default_font_color,
+        fontWeight: 'bold',
+        },
+    }
+};
+
+
+var chartDiv = document.createElement("div");
+chartDiv.setAttribute("id", "chart-div");
+chartDiv.setAttribute("class", "chart-div");
+document.body.append(chartDiv);
+
+basic_chart = Highcharts.chart("chart-div", chartOptions);
+
+function addTrinketChart(parentDiv)
+{
+	console.log(parentDiv);
+}
