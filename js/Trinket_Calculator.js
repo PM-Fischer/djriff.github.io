@@ -21,6 +21,7 @@ const dark_color = "#343a40";
 //Create Div which holds all buttons
 var setupDiv = document.createElement("div");
 setupDiv.setAttribute("id", "setup-div");
+setupDiv.setAttribute("class", "main");
 document.body.appendChild(setupDiv);
 
 //Add Talent Setups
@@ -32,9 +33,45 @@ setupDiv.appendChild(talentDiv);
 var talentBtn = document.createElement("button");
 talentBtn.setAttribute("id", "talentbtn");
 talentBtn.setAttribute("class", "dropbtn");
+talentBtn.setAttribute("onclick", "talentSelectMenu()")
 var talentText = document.createTextNode("Select Talent");
-talentDiv.appendChild(talentText);
+talentBtn.appendChild(talentText);
+talentDiv.appendChild(talentBtn);
 
+var talentDropDiv = document.createElement("div");
+talentDropDiv.setAttribute("id", "talentDropDiv");
+talentDropDiv.setAttribute("class", "dropdown-content");
+talentDiv.appendChild(talentDropDiv);
+
+generatehorizontalSpacer(setupDiv);
+
+var fightDiv = document.createElement("div");
+fightDiv.setAttribute("id", "fight-div");
+fightDiv.setAttribute("class", "dropdown");
+setupDiv.appendChild(fightDiv);
+
+
+
+var fightBtn = document.createElement("button");
+fightBtn.setAttribute("id", "fightbtn")
+fightBtn.setAttribute("class", "dropbtn");
+fightBtn.setAttribute("onclick", "fightSelectMenu()")
+var fightText = document.createTextNode("Select Fight Style");
+fightBtn.appendChild(fightText);
+fightDiv.appendChild(fightBtn);
+
+var fightDropDiv = document.createElement("div");
+fightDropDiv.setAttribute("id", "fightDropDiv");
+fightDropDiv.setAttribute("class", "dropdown-content");
+fightDiv.appendChild(fightDropDiv);
+
+function generateSolidLine()
+{
+	var solidLine = document.createElement("hr")
+	document.body.appendChild(solidLine);
+}
+
+generateSolidLine()
 
 var mainDiv = document.createElement("div");
 mainDiv.setAttribute("id", "main-div");
@@ -45,8 +82,81 @@ document.body.appendChild(mainDiv);
 
 number = 0
 
+function talentSelectMenu()
+{
+
+	talents = ["Dark Ascension", "Legacy of the Void"];
+	for (t of talents)
+	{
+		let talent = document.createElement("p");
+		talent.setAttribute("id", t);
+		talent.setAttribute("class", "dropdown-content");
+		talent.setAttribute("onclick", "selectTalent(this.id)");
+		var talentText = document.createTextNode(t);
+		talent.appendChild(talentText);
+		talentDropDiv.appendChild(talent);
+	}
+
+	talentDropDiv.classList.toggle("show");
+}
+
+function selectTalent(click)
+{	
+	let dropDownElement = document.getElementById(click).parentElement;
+	talentBtn.childNodes[0].nodeValue = click;
+
+	while (dropDownElement.firstChild)
+	{
+		dropDownElement.removeChild(dropDownElement.firstChild);
+	}
+}
 
 
+function fightSelectMenu()
+{
+	fights = ["Composite", "Single Target", "Dungeon Slice"];
+	for (f of fights)
+	{
+		let fight = document.createElement("p");
+		fight.setAttribute("id", f);
+		fight.setAttribute("class", "dropdown-content");
+		fight.setAttribute("onclick", "selectFight(this.id)");
+		var fightText = document.createTextNode(f);
+		fight.appendChild(fightText);
+		fightDropDiv.appendChild(fight);
+	}
+
+	fightDropDiv.classList.toggle("show");
+}
+
+function selectFight(click)
+{
+	let dropDownElement = document.getElementById(click).parentElement;
+	fightBtn.childNodes[0].nodeValue = click;
+
+	while (dropDownElement.firstChild)
+	{
+		dropDownElement.removeChild(dropDownElement.firstChild);
+	}
+}
+
+function updateTrinketText(click)
+{
+	let trinketDropDownElement = document.getElementById(click).parentElement;
+	let trinketDropDownParent = trinketDropDownElement.parentElement;
+	let newtrinketBtn = trinketDropDownParent.childNodes[0].childNodes[0];
+	newtrinketBtn.nodeValue = click;
+	let ilvlText = trinketDropDownParent.childNodes[3].childNodes[0];
+	ilvlText.nodeValue = "Select Item Level";
+	//addIlvlDropdown(trinketDropDownParent);
+
+	//Remove all the trinkets.
+	while (trinketDropDownElement.firstChild) 
+	{
+    	trinketDropDownElement.removeChild(trinketDropDownElement.firstChild);
+	}
+
+}
 
 function generateTrinketMenu(number){
 	//Create Div which holds trinkets dropdown
@@ -124,6 +234,8 @@ generateIlvlMenu(number);
 number = generateTrinketMenu(number);
 generateIlvlMenu(number);
 
+generateSolidLine()
+
 function addTrinketMenu(){
 	number = generateTrinketMenu(number);
 	generateIlvlMenu(number);
@@ -132,7 +244,7 @@ function addTrinketMenu(){
 
 var addTrinketDiv = document.createElement("div");
 addTrinketDiv.setAttribute("id", "add-trinket-div");
-//addTrinketDiv.setAttribute("class", "add-trinket");
+addTrinketDiv.setAttribute("class", "main");
 document.body.appendChild(addTrinketDiv)
 
 var addTrinket = document.createElement("button");

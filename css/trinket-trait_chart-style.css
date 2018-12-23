@@ -25,6 +25,12 @@
   display: block;
 }
 
+.vertical-spacer {
+  margin: 20px;
+  padding-bottom: 20px;
+  display: grid;
+}
+
 .divider {
   width: 10px;
   height: auto;
