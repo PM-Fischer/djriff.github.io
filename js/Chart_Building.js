@@ -538,6 +538,23 @@ Button Layout:
 [Composite][Single Target][Dungeon] --"Fight-Style-Div"
 */
 
+//Create Div for other charts
+var externalLinks = document.createElement("div");
+externalLinks.setAttribute("id", "external-links");
+externalLinks.setAttribute("class", "tabcontent");
+
+var trinketCalc = document.createElement("BUTTON");
+trinketCalc.setAttribute("id", "trinket-calculator-btn");
+trinketCalc.setAttribute("class", "button");
+trinketCalc.setAttribute("onClick", "location.href='trinket_calc.html'");
+var trinketCalcText = document.createTextNode("Trinket Calculator");
+trinketCalc.appendChild(trinketCalcText)
+externalLinks.appendChild(trinketCalc);
+document.body.appendChild(externalLinks);
+
+var hr = document.createElement("hr");
+document.body.appendChild(hr);
+
 
 //Create all the HTML for the elements for the charts.
 //Main Div

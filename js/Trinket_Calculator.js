@@ -44,6 +44,24 @@ const ilevel_color_table = {
 
 */
 
+//Create Div for other charts
+var externalLinks = document.createElement("div");
+externalLinks.setAttribute("id", "external-links");
+externalLinks.setAttribute("class", "main");
+
+var trinketCalc = document.createElement("BUTTON");
+trinketCalc.setAttribute("id", "trinket-calculator-btn");
+trinketCalc.setAttribute("class", "dropbtn");
+trinketCalc.setAttribute("onClick", "location.href='index.html'");
+var trinketCalcText = document.createTextNode("Trinket/Azerite Trait Charts");
+trinketCalc.appendChild(trinketCalcText)
+externalLinks.appendChild(trinketCalc);
+document.body.appendChild(externalLinks);
+
+var hr = document.createElement("hr");
+document.body.appendChild(hr);
+
+
 //Create Div which holds all buttons
 var setupDiv = document.createElement("div");
 setupDiv.setAttribute("id", "setup-div");
