@@ -402,6 +402,182 @@ window.onclick = function(event) {
   }
 }
 
+
+var chartDiv = document.createElement("div");
+chartDiv.setAttribute("id", "chart-div");
+chartDiv.setAttribute("class", "chart-div");
+document.body.append(chartDiv);
+
+
+
+function getTalentSetup()
+{
+	talentSetup = talentBtn.childNodes[0].nodeValue;
+	if (talentSetup == "Legacy of the Void")
+		return "LotV";
+	else if (talentSetup == "Dark Ascension")
+		return "DA";
+	else
+		alert("Error, you must select a talent before selecting a trinket");
+}
+
+function getFightSetup()
+{
+	fightSetup = fightBtn.childNodes[0].nodeValue;
+	if (fightSetup == "Composite")
+		return "C";
+	else if (fightSetup == "Single Target")
+		return "ST";
+	else if (fightSetup == "Dungeon Slice")
+		return "D";
+	else
+		alert("Error, you must select a fight before selecting a trinket");
+}
+
+function addTrinketToChart()
+{
+	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/trinkets_" + getTalentSetup() + "_" + getFightSetup() + ".json" , function(data) {
+		let chartItems = [];		
+		let graphData = [];
+		for (var i = 0; i < number; i++)
+		{
+			let trinketDiv = document.getElementById("trinket-div"+i)
+			let trinketName = trinketDiv.childNodes[0].childNodes[0].nodeValue;
+			let trinketIlvl = trinketDiv.childNodes[3].childNodes[0].nodeValue;
+			let baseDPS = data["data"]["Base"]["300"];
+
+			if (trinketName != "Select Trinket" && trinketIlvl != "Select Item Level")
+			{
+				trinketDPS = data["data"][trinketName][trinketIlvl]
+				trinketDPS -= baseDPS
+				chartItems.push(trinketName);
+				graphData.push({
+					name: trinketName, 
+					data: [trinketDPS]});
+			}	
+		}
+		renderChart(graphData, chartItems);
+		}.bind(this)).fail(function(){
+		console.log("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
+		alert("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
+	});
+}
+
+function renderChart(graphData, chartItems)
+{
+	let talentSetup = talentBtn.childNodes[0].nodeValue;
+	let fightSetup = fightBtn.childNodes[0].nodeValue;
+
+	basic_chart = Highcharts.chart("chart-div", {
+	    chart: {
+        renderTo: "chart-div",
+        type: 'bar',
+        backgroundColor: default_background_color
+        },
+	    title: {
+	    	style: {
+	            color: default_font_color,
+	            fontWeight: 'bold'
+            },
+	        text: 'Trinket Comparison -' + talentSetup + ' - ' + fightSetup
+	    },
+	    plotOptions: {
+	        bar: {
+	            dataLabels: {
+	                align: 'right',
+	                enabled: false,
+	                pointFormat: "Value: {point.y:,.0f} mm"
+	            },
+	            enableMouseTracking: true,
+	            pointWidth: 15,
+	            spacing: 20,
+	            events: {
+	            	legendItemClick: function () {
+	      				return false;
+	      			}
+	            },
+	            allowPointSelect: false
+	            }
+    	},
+	    xAxis: {
+	    	categories: [''],
+	        labels: {
+	        	useHTML: false,
+	            style: {
+	                color: default_font_color,
+	                fontWeight: 'bold',
+	                fontSize: 14,
+	                events: {
+	                	legendItemClick: function () {
+	          				return false;
+	      				}
+	            	},
+	            }
+	        }
+    	},
+	    yAxis: {
+	    	crosshair: {
+	    		color: 'white',
+	    		width: 3,
+	    		snap: false,
+	    		zIndex: 10
+	    	},
+	        labels: {
+	            style: {
+	                color: default_font_color
+	            }
+	        },
+	        stackLabels: {
+	            enabled: true,
+	            style: {
+	                fontWeight: 'bold',
+	                color: default_font_color,
+	                fontSize: 14
+	            }
+	        },
+	        gridLineColor: '#616c77',
+	        title: {
+	            text: 'Damage Per Second',
+	            color: default_font_color
+	        }
+	    },
+	    legend: {
+	        layout: 'vertical',
+	        align: 'right',
+	        borderColor: medium_color,
+	        borderWidth: 1,
+	        floating: false,
+	        itemMarginBottom: 3,
+	        itemMaginTop: 0,
+	        reversed: false,
+	        shadow: false,
+	        verticalAlign: 'middle',
+	        x: 0,
+	        y: 0,
+	        title: {
+	            text: "Trinket Name",
+	            style:
+	                {
+	                color:light_color,
+	                fontWeight:'bold',
+	            },
+	        },
+	    itemStyle: {
+	        color: default_font_color,
+	        fontWeight: 'bold',
+	        },
+	    },
+	    series: $.each(graphData, function(i, chartD) {
+        return chartD;
+    })
+	});
+
+	document.getElementById("chart-div").style.height = 200 + chartItems.length * 30 + "px";
+	basic_chart.setSize(document.getElementById("chart-div").style.width, document.getElementById("chart-div").style.height);
+	basic_chart.redraw();
+}
+
+/*
 var chartOptions = {
     chart: {
         renderTo: "chart-div",
@@ -416,8 +592,7 @@ var chartOptions = {
         text: "Trinket Comparison - Dark Ascension"
         },
     plotOptions: {
-        series: {
-            stacking: 'normal',
+        bar: {
             dataLabels: {
                 align: 'right',
                 enabled: false,
@@ -502,101 +677,4 @@ var chartOptions = {
         },
     }
 };
-
-
-var chartDiv = document.createElement("div");
-chartDiv.setAttribute("id", "chart-div");
-chartDiv.setAttribute("class", "chart-div");
-document.body.append(chartDiv);
-
-basic_chart = Highcharts.chart("chart-div", chartOptions);
-
-
-function getTalentSetup()
-{
-	talentSetup = talentBtn.childNodes[0].nodeValue;
-	if (talentSetup == "Legacy of the Void")
-		return "LotV";
-	else if (talentSetup == "Dark Ascension")
-		return "DA";
-	else
-		alert("Error, you must select a talent before selecting a trinket");
-}
-
-function getFightSetup()
-{
-	fightSetup = fightBtn.childNodes[0].nodeValue;
-	if (fightSetup == "Composite")
-		return "C";
-	else if (fightSetup == "Single Target")
-		return "ST";
-	else if (fightSetup == "Dungeon Slice")
-		return "D";
-	else
-		alert("Error, you must select a fight before selecting a trinket");
-}
-
-function addTrinketToChart()
-{
-	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/trinkets_" + getTalentSetup() + "_" + getFightSetup() + ".json" , function(data) {
-		let chartItems = [];
-		let talentSetup = talentBtn.childNodes[0].nodeValue;
-		let fightSetup = fightBtn.childNodes[0].nodeValue;
-
-		//Clear chart
-		while (basic_chart.series.length > 0){
-			basic_chart.series[0].remove(false);
-		}
-		graphData = [];
-		for (var i = 0; i < number; i++)
-		{
-			let trinketDiv = document.getElementById("trinket-div"+i)
-			let trinketName = trinketDiv.childNodes[0].childNodes[0].nodeValue;
-			let trinketIlvl = trinketDiv.childNodes[3].childNodes[0].nodeValue;
-			let baseDPS = data["data"]["Base"]["300"];
-			console.log(trinketName);
-			console.log(trinketIlvl);
-
-			if (trinketName != "Select Trinket" && trinketIlvl != "Select Item Level")
-			{
-				trinketDPS = data["data"][trinketName][trinketIlvl]
-				trinketDPS -= baseDPS
-				chartItems.push(trinketName);
-				graphData.push([{name: trinketName, data: trinketDPS}]);
-				console.log("data: " + trinketDPS + " / Trinket Name: " + trinketName);
-				console.log(chartItems);
-				/*
-				basic_chart.addSeries({
-					color: ilevel_color_table[trinketIlvl],
-					data: trinketDPS,
-					name: trinketName,
-					showInLegend: true
-					}, false);
-				*/
-			}	
-		}
-		basic_chart.update({
-					xAxis: {
-						categories: chartItems,
-					},
-					title: {
-						text: "Trinket Comparison - " + talentSetup + " - " + fightSetup
-					},
-					tooltip: {
-						shared: true,
-						headerFormat: "<b>(point.x)</b>",
-					},
-					series: [graphData]
-				});
-		
-
-
-		
-		document.getElementById("chart-div").style.height = 200 + chartItems.length * 30 + "px";
-		basic_chart.setSize(document.getElementById("chart-div").style.width, document.getElementById("chart-div").style.height);
-		basic_chart.redraw();
-		}.bind(this)).fail(function(){
-		console.log("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
-		alert("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
-	});
-}
+*/

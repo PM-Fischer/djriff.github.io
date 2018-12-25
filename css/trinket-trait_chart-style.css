@@ -77,6 +77,7 @@
 
 .chart-div {
   display: none;
+  width: 100%;
 }
 
 .chart-div-show {
