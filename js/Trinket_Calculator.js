@@ -135,6 +135,7 @@ function selectTalent(click)
 	{
 		dropDownElement.removeChild(dropDownElement.firstChild);
 	}
+	addTrinketToChart();
 }
 
 
@@ -164,6 +165,7 @@ function selectFight(click)
 	{
 		dropDownElement.removeChild(dropDownElement.firstChild);
 	}
+	addTrinketToChart();
 }
 
 function updateTrinketText(click)
@@ -215,7 +217,7 @@ function generateTrinketMenu(number){
 }
 
 function generateIlvlMenu(number){
-	number -= 1;
+	number --;
 	var currTrinketDiv = document.getElementById('trinket-div'+number)
 
 	//Crate ilvl button
@@ -234,6 +236,8 @@ function generateIlvlMenu(number){
 	ilvlDropDown.setAttribute("id", "ilvlDropDown"+number);
 	ilvlDropDown.setAttribute("class", "dropdown-content");
 	currTrinketDiv.appendChild(ilvlDropDown);
+
+	number++;
 
 	
 }
@@ -263,11 +267,13 @@ generateIlvlMenu(number);
 generateSolidLine()
 
 function addTrinketMenu(){
+	console.log(number)
 	number = generateTrinketMenu(number);
 	generateIlvlMenu(number);
+	console.log(number)
 }
 
-
+/*
 var addTrinketDiv = document.createElement("div");
 addTrinketDiv.setAttribute("id", "add-trinket-div");
 addTrinketDiv.setAttribute("class", "main");
@@ -280,7 +286,7 @@ addTrinket.setAttribute("onclick", "addTrinketMenu()");
 var addTrinketText = document.createTextNode("+");
 addTrinket.appendChild(addTrinketText);
 addTrinketDiv.appendChild(addTrinket);
-
+*/
 
 
 
@@ -417,8 +423,6 @@ function getTalentSetup()
 		return "LotV";
 	else if (talentSetup == "Dark Ascension")
 		return "DA";
-	else
-		alert("Error, you must select a talent before selecting a trinket");
 }
 
 function getFightSetup()
@@ -430,13 +434,23 @@ function getFightSetup()
 		return "ST";
 	else if (fightSetup == "Dungeon Slice")
 		return "D";
-	else
-		alert("Error, you must select a fight before selecting a trinket");
 }
 
 function addTrinketToChart()
 {
-	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/trinkets_" + getTalentSetup() + "_" + getFightSetup() + ".json" , function(data) {
+	talentChoice = getTalentSetup();
+	if (talentChoice == undefined)
+	{
+		talentChoice = "DA";
+	}
+	fightChoice = getFightSetup();
+	if (fightChoice == undefined)
+	{
+		fightChoice = "C";
+	}
+	console.log(talentChoice + '-' + fightChoice)
+
+	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/trinkets_" + talentChoice + "_" + fightChoice + ".json" , function(data) {
 		let chartItems = [];		
 		let graphData = [];
 		for (var i = 0; i < number; i++)
@@ -459,7 +473,7 @@ function addTrinketToChart()
 		renderChart(graphData, chartItems);
 		}.bind(this)).fail(function(){
 		console.log("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
-		alert("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
+		alert("The JSON chart failed to load, please let DJ know via discord Djriff#0001, Ensure you select a Talent Setup and Fight Style First.");
 	});
 }
 
@@ -576,105 +590,3 @@ function renderChart(graphData, chartItems)
 	basic_chart.setSize(document.getElementById("chart-div").style.width, document.getElementById("chart-div").style.height);
 	basic_chart.redraw();
 }
-
-/*
-var chartOptions = {
-    chart: {
-        renderTo: "chart-div",
-        type: 'bar',
-        backgroundColor: default_background_color
-        },
-    title: {
-        style: {
-            color: default_font_color,
-            fontWeight: 'bold'
-            },
-        text: "Trinket Comparison - Dark Ascension"
-        },
-    plotOptions: {
-        bar: {
-            dataLabels: {
-                align: 'right',
-                enabled: false,
-                pointFormat: "Value: {point.y:,.0f} mm"
-            },
-            enableMouseTracking: true,
-            pointWidth: 15,
-            spacing: 20,
-            events: {
-            	legendItemClick: function () {
-      				return false;
-      			}
-            },
-            allowPointSelect: false
-            }
-    },
-    xAxis: {
-        labels: {
-        	useHTML: false,
-            style: {
-                color: default_font_color,
-                fontWeight: 'bold',
-                fontSize: 14,
-                events: {
-                	legendItemClick: function () {
-          				return false;
-      				}
-            	},
-            }
-        }
-    },
-    yAxis: {
-    	crosshair: {
-    		color: 'white',
-    		width: 3,
-    		snap: false,
-    		zIndex: 10
-    	},
-        labels: {
-            style: {
-                color: default_font_color
-            }
-        },
-        stackLabels: {
-            enabled: true,
-            style: {
-                fontWeight: 'bold',
-                color: default_font_color,
-                fontSize: 14
-            }
-        },
-        gridLineColor: '#616c77',
-        title: {
-            text: 'Damage Per Second',
-            color: default_font_color
-        }
-    },
-    legend: {
-        layout: 'vertical',
-        align: 'right',
-        borderColor: medium_color,
-        borderWidth: 1,
-        floating: false,
-        itemMarginBottom: 3,
-        itemMaginTop: 0,
-        reversed: true,
-        shadow: false,
-        verticalAlign: 'middle',
-        x: 0,
-        y: 0,
-        title: {
-            text: "Trinket Name",
-            style:
-                {
-                color:light_color,
-                fontWeight:'bold',
-            },
-        },
-    itemStyle: {
-        color: default_font_color,
-        fontWeight: 'bold',
-        },
-    }
-};
-*/
