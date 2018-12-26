@@ -528,8 +528,17 @@ WCP_Chart.prototype.tabClicked = function(event) {
     }
 };
     
-//var buttons = document.querySelector(this.chartId + '_tabs > button');
-//buttons.addEventListener('click', tabClicked);
+
+function generatehorizontalSpacer(div)
+{
+	var horizontalSpacer = document.createElement("span");
+	horizontalSpacer.setAttribute("class", "divider");
+	horizontalSpacer.style.width = '5px';
+	horizontalSpacer.style.height = 'auto';
+	horizontalSpacer.style.display = 'inline-block';
+	div.appendChild(horizontalSpacer);
+}
+
 
 /*
 Button Layout:
@@ -550,7 +559,20 @@ trinketCalc.setAttribute("onClick", "location.href='trinket_calc.html'");
 var trinketCalcText = document.createTextNode("Trinket Calculator");
 trinketCalc.appendChild(trinketCalcText)
 externalLinks.appendChild(trinketCalc);
+
+generatehorizontalSpacer(externalLinks);
+
+var traitCalc = document.createElement("BUTTON");
+traitCalc.setAttribute("id", "trait-calculator-btn");
+traitCalc.setAttribute("class", "button");
+traitCalc.setAttribute("onClick", "location.href='trait_calc.html'");
+var traitCalcText = document.createTextNode("Trait Calculator");
+traitCalc.appendChild(traitCalcText)
+externalLinks.appendChild(traitCalc);
+
 document.body.appendChild(externalLinks);
+
+
 
 var hr = document.createElement("hr");
 document.body.appendChild(hr);
@@ -575,6 +597,9 @@ var DAText = document.createTextNode("Dark Ascension");
 DABtn.appendChild(DAText);
 document.body.appendChild(talentDiv);
 talentDiv.appendChild(DABtn)
+
+generatehorizontalSpacer(talentDiv);
+
 //LotV
 var LotVBtn = document.createElement("BUTTON");
 LotVBtn.setAttribute("id", "LotvBtn");
@@ -604,6 +629,9 @@ TrinketBtn.setAttribute("onClick", "itemClick('Trinkets')");
 var TrinketText = document.createTextNode("Trinket");
 TrinketBtn.appendChild(TrinketText);
 TrinketTraitDiv.appendChild(TrinketBtn)
+
+generatehorizontalSpacer(TrinketTraitDiv);
+
 //Trait
 var TraitBtn = document.createElement("BUTTON");
 TraitBtn.setAttribute("id", "TraitsBtn");
@@ -630,6 +658,9 @@ compositeBtn.setAttribute("onClick", "fightClick('C')");
 var compositeText = document.createTextNode("Composite");
 compositeBtn.appendChild(compositeText);
 fightStyleDiv.appendChild(compositeBtn)
+
+generatehorizontalSpacer(fightStyleDiv);
+
 //Single Target
 var singleTargetBtn = document.createElement("BUTTON");
 singleTargetBtn.setAttribute("id", "STBtn");
@@ -638,6 +669,9 @@ singleTargetBtn.setAttribute("onClick", "fightClick('ST')");
 var singleTargetText = document.createTextNode("Single Target");
 singleTargetBtn.appendChild(singleTargetText);
 fightStyleDiv.appendChild(singleTargetBtn)
+
+generatehorizontalSpacer(fightStyleDiv);
+
 //Dungeon
 var dungeonBtn = document.createElement("BUTTON");
 dungeonBtn.setAttribute("id", "DBtn");
@@ -668,7 +702,7 @@ function talentClick(clicked)
 		console.log(talents[i].id);
 		if (talents[i].id.toLowerCase() == clickedID.toLowerCase())
 		{
-			talents[i].style.borderColor = 'blue';
+			talents[i].style.borderColor = '#DDA0DD';
 			console.log("match")
 		}
 		else
@@ -689,7 +723,7 @@ function itemClick(clicked)
 		console.log(trinketTraits[i].id);
 		if (trinketTraits[i].id.toLowerCase() == clickedID.toLowerCase())
 		{
-			trinketTraits[i].style.borderColor = 'blue';
+			trinketTraits[i].style.borderColor = '#DDA0DD';
 		}
 		else
 		{
@@ -708,7 +742,7 @@ function fightClick(clicked)
 		console.log(fight[i].id);
 		if (fight[i].id.toLowerCase() == clickedID.toLowerCase())
 		{
-			fight[i].style.borderColor = 'blue';
+			fight[i].style.borderColor = '#DDA0DD';
 		}
 		else
 		{
@@ -762,7 +796,7 @@ function styleButtons(){
 		btn.style.justifyContent = "center";
 		if (btn.id == 'DABtn' || btn.id == 'TrinketsBtn' || btn.id == 'CBtn')
 		{
-			btn.style.borderColor = "blue";
+			btn.style.borderColor = "#DDA0DD";
 		}
 		else
 		{

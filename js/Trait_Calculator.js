@@ -32,6 +32,58 @@ const ilevel_color_table = {
 */
 };
 
+const primary_azerite_traits = [
+	'Archive of the Titans',
+	'Barrage Of Many Bombs',
+	'Battlefield Focus',
+	'Blightborne Infusion',
+	'Blood Rite',
+	'Champion of Azeroth',
+	'Chorus of Insanity',
+	'Collective Will',
+	'Combined Might',
+	'Dagger in the Back Behind',
+	'Dagger in the Back Front',
+	'Death Throes',
+	'Filthy Transfusion',
+	'Glory in Battle',
+	'Incite the Pack',
+	'Laser Matrix',
+	'Meticulous Scheming',
+	'On My Way',
+	'Relational Normalization Gizmo',
+	'Retaliatory Fury',
+	'Rezans Fury',
+	'Ricocheting Inflatable Pyrosaw',
+	'Ruinous Bolt',
+	'Searing Dialogue',
+	'Secrets of the Deep',
+	'Spiteful Apparitions',
+	'Swirling Sands',
+	'Sylvanas Resolve',
+	'Synaptic Spark Capacitor',
+	'Thought Harvester',
+	'Thunderous Blast',
+	'Tidal Surge',
+	'Tradewinds',
+	'Unstable Catalyst',
+	'Whispers of the Damned'
+]
+
+const secondary_azerite_traits = [
+	'Azerite Globules', 
+	'Blood Siphon', 
+	'Earthlink',
+	'Elemental Whirl', 
+	'Gutripper',
+	'Heed My Call', 
+	'Lifespeed',
+	'On My Way', 
+	'Overwhelming Power', 
+	'Unstable Flames'
+]
+
+
 /*
 <div class="dropdown">
   <button onclick="myFunction()" class="dropbtn">Dropdown</button>
@@ -60,13 +112,13 @@ document.body.appendChild(externalLinks);
 
 generatehorizontalSpacer(externalLinks);
 
-var traitCalc = document.createElement("BUTTON");
-traitCalc.setAttribute("id", "trait-trait-btn");
-traitCalc.setAttribute("class", "dropbtn");
-traitCalc.setAttribute("onClick", "location.href='Trait_Calc.html'");
-var traitCalcText = document.createTextNode("Trait Calculator");
-traitCalc.appendChild(traitCalcText)
-externalLinks.appendChild(traitCalc);
+var trinketCalc = document.createElement("BUTTON");
+trinketCalc.setAttribute("id", "trinket-trait-btn");
+trinketCalc.setAttribute("class", "dropbtn");
+trinketCalc.setAttribute("onClick", "location.href='Trinket_Calc.html'");
+var trinketCalcText = document.createTextNode("Trinket Calculator");
+trinketCalc.appendChild(trinketCalcText)
+externalLinks.appendChild(trinketCalc);
 document.body.appendChild(externalLinks);
 
 var hr = document.createElement("hr");
@@ -164,7 +216,7 @@ function selectTalent(click)
 	{
 		dropDownElement.removeChild(dropDownElement.firstChild);
 	}
-	addTrinketToChart();
+	addtraitToChart();
 }
 
 
@@ -194,51 +246,51 @@ function selectFight(click)
 	{
 		dropDownElement.removeChild(dropDownElement.firstChild);
 	}
-	addTrinketToChart();
+	addtraitToChart();
 }
 
-function updateTrinketText(click)
+function updateTraitText(click)
 {
-	let trinketDropDownElement = document.getElementById(click).parentElement;
-	let trinketDropDownParent = trinketDropDownElement.parentElement;
-	let newtrinketBtn = trinketDropDownParent.childNodes[0].childNodes[0];
-	newtrinketBtn.nodeValue = click;
-	let ilvlText = trinketDropDownParent.childNodes[3].childNodes[0];
+	let traitDropDownElement = document.getElementById(click).parentElement;
+	let traitDropDownParent = traitDropDownElement.parentElement;
+	let newtraitBtn = traitDropDownParent.childNodes[0].childNodes[0];
+	newtraitBtn.nodeValue = click;
+	let ilvlText = traitDropDownParent.childNodes[3].childNodes[0];
 	ilvlText.nodeValue = "Select Item Level";
-	//addIlvlDropdown(trinketDropDownParent);
+	//addIlvlDropdown(traitDropDownParent);
 
-	//Remove all the trinkets.
-	while (trinketDropDownElement.firstChild) 
+	//Remove all the traits.
+	while (traitDropDownElement.firstChild) 
 	{
-    	trinketDropDownElement.removeChild(trinketDropDownElement.firstChild);
+    	traitDropDownElement.removeChild(traitDropDownElement.firstChild);
 	}
 
 }
 
-function generateTrinketMenu(number){
-	//Create Div which holds trinkets dropdown
+function generatetraitMenu(number){
+	//Create Div which holds traits dropdown
 	
-	var trinketDiv = document.createElement("div");
-	trinketDiv.setAttribute("id", "trinket-div" + number);
-	trinketDiv.setAttribute("class", "dropdown");
+	var traitDiv = document.createElement("div");
+	traitDiv.setAttribute("id", "trait-div" + number);
+	traitDiv.setAttribute("class", "dropdown");
 
-	//Create Trinket Button
-	var trinketBtn = document.createElement("button");
-	trinketBtn.setAttribute("id", "trinketbtn" + number);
-	trinketBtn.setAttribute("class","dropbtn");
-	trinketBtn.setAttribute("onclick", "displayTrinkets(this)");
+	//Create trait Button
+	var traitBtn = document.createElement("button");
+	traitBtn.setAttribute("id", "traitbtn" + number);
+	traitBtn.setAttribute("class","dropbtn");
+	traitBtn.setAttribute("onclick", "displaytraits(this)");
 
-	var trinketText = document.createTextNode("Select Trinket");
-	trinketBtn.appendChild(trinketText);
-	trinketDiv.appendChild(trinketBtn);
+	var traitText = document.createTextNode("Select trait");
+	traitBtn.appendChild(traitText);
+	traitDiv.appendChild(traitBtn);
 
 
-	var trinketDropDown = document.createElement("div");
-	trinketDropDown.setAttribute("id", "trinketDropDown"+number);
-	trinketDropDown.setAttribute("class", "dropdown-content");
-	trinketDiv.appendChild(trinketDropDown);
+	var traitDropDown = document.createElement("div");
+	traitDropDown.setAttribute("id", "traitDropDown"+number);
+	traitDropDown.setAttribute("class", "dropdown-content");
+	traitDiv.appendChild(traitDropDown);
 
-	mainDiv.appendChild(trinketDiv);
+	mainDiv.appendChild(traitDiv);
 	generateverticalSpacer();
 
 	number++;
@@ -247,7 +299,7 @@ function generateTrinketMenu(number){
 
 function generateIlvlMenu(number){
 	number --;
-	var currTrinketDiv = document.getElementById('trinket-div'+number)
+	var currtraitDiv = document.getElementById('trait-div'+number)
 
 	//Crate ilvl button
 	var ilvlBtn = document.createElement("button");
@@ -258,13 +310,13 @@ function generateIlvlMenu(number){
 	var ilvlText = document.createTextNode("Select Item Level");
 	ilvlBtn.appendChild(ilvlText);
 
-	generatehorizontalSpacer(currTrinketDiv);
-	currTrinketDiv.appendChild(ilvlBtn);
+	generatehorizontalSpacer(currtraitDiv);
+	currtraitDiv.appendChild(ilvlBtn);
 
 	var ilvlDropDown = document.createElement("div");
 	ilvlDropDown.setAttribute("id", "ilvlDropDown"+number);
 	ilvlDropDown.setAttribute("class", "dropdown-content");
-	currTrinketDiv.appendChild(ilvlDropDown);
+	currtraitDiv.appendChild(ilvlDropDown);
 
 	number++;
 
@@ -285,63 +337,67 @@ function generateverticalSpacer()
 	mainDiv.appendChild(verticalSpacer);
 }
 
-number = generateTrinketMenu(number);
+number = generatetraitMenu(number);
 
 generateIlvlMenu(number);
-number = generateTrinketMenu(number);
+number = generatetraitMenu(number);
 generateIlvlMenu(number);
-number = generateTrinketMenu(number);
+number = generatetraitMenu(number);
 generateIlvlMenu(number);
 
 generateSolidLine()
 
-function addTrinketMenu(){
+function addtraitMenu(){
 	console.log(number)
-	number = generateTrinketMenu(number);
+	number = generatetraitMenu(number);
 	generateIlvlMenu(number);
 	console.log(number)
 }
 
 /*
-var addTrinketDiv = document.createElement("div");
-addTrinketDiv.setAttribute("id", "add-trinket-div");
-addTrinketDiv.setAttribute("class", "main");
-document.body.appendChild(addTrinketDiv)
+var addtraitDiv = document.createElement("div");
+addtraitDiv.setAttribute("id", "add-trait-div");
+addtraitDiv.setAttribute("class", "main");
+document.body.appendChild(addtraitDiv)
 
-var addTrinket = document.createElement("button");
-addTrinket.setAttribute("id", "add-trinket");
-addTrinket.setAttribute("class", "add-trinket");
-addTrinket.setAttribute("onclick", "addTrinketMenu()");
-var addTrinketText = document.createTextNode("+");
-addTrinket.appendChild(addTrinketText);
-addTrinketDiv.appendChild(addTrinket);
+var addtrait = document.createElement("button");
+addtrait.setAttribute("id", "add-trait");
+addtrait.setAttribute("class", "add-trait");
+addtrait.setAttribute("onclick", "addtraitMenu()");
+var addtraitText = document.createTextNode("+");
+addtrait.appendChild(addtraitText);
+addtraitDiv.appendChild(addtrait);
 */
 
 
 
 
 
-function displayTrinkets(trinketID)
+function displaytraits(traitID)
 {
-	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/"+ "trinkets_DA_C" + ".json" , function(data) {
+	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/traits_DA_C.json" , function(data) {
 		let sortedItems = [];
 		let dpsSortedData = data["sorted_data_keys"];
+		console.log(dpsSortedData);
 		dpsSortedData = dpsSortedData.sort();
-		let trinketDrop = trinketID.parentElement.childNodes[1];
-		let trinketDropDown = trinketID.parentElement.childNodes[0];
+		let traitDrop = traitID.parentElement.childNodes[1];
+		let traitDropDown = traitID.parentElement.childNodes[0];
 		for (d of dpsSortedData)
 		{
-			let newTrinket = document.createElement("p");
-			newTrinket.setAttribute("id", d);
-			newTrinket.setAttribute("class", "dropdown-content");
-			newTrinket.setAttribute("onclick", "updateTrinketText(this.id)");
-			let newTrinketText = document.createTextNode(d);
-			newTrinket.appendChild(newTrinketText);
-			trinketDrop.appendChild(newTrinket);
+			if (d in primary_azerite_traits)
+			{	
+				let newtrait = document.createElement("p");
+				newtrait.setAttribute("id", d);
+				newtrait.setAttribute("class", "dropdown-content");
+				newtrait.setAttribute("onclick", "updateTraitText(this.id)");
+				let newtraitText = document.createTextNode(d);
+				newtrait.appendChild(newtraitText);
+				traitDrop.appendChild(newtrait);
+			}
 		}
 		
-		//let trinketDrop = document.getElementById(trinketID);
-		trinketDrop.classList.toggle("show");
+		//let traitDrop = document.getElementById(traitID);
+		traitDrop.classList.toggle("show");
 		
 
 		}.bind(this)).fail(function(){
@@ -352,20 +408,20 @@ function displayTrinkets(trinketID)
 
 
 
-function updateTrinketText(click)
+function updateTraitText(click)
 {
-	let trinketDropDownElement = document.getElementById(click).parentElement;
-	let trinketDropDownParent = trinketDropDownElement.parentElement;
-	let newtrinketBtn = trinketDropDownParent.childNodes[0].childNodes[0];
-	newtrinketBtn.nodeValue = click;
-	let ilvlText = trinketDropDownParent.childNodes[3].childNodes[0];
+	let traitDropDownElement = document.getElementById(click).parentElement;
+	let traitDropDownParent = traitDropDownElement.parentElement;
+	let newtraitBtn = traitDropDownParent.childNodes[0].childNodes[0];
+	newtraitBtn.nodeValue = click;
+	let ilvlText = traitDropDownParent.childNodes[3].childNodes[0];
 	ilvlText.nodeValue = "Select Item Level";
-	//addIlvlDropdown(trinketDropDownParent);
+	//addIlvlDropdown(traitDropDownParent);
 
-	//Remove all the trinkets.
-	while (trinketDropDownElement.firstChild) 
+	//Remove all the traits.
+	while (traitDropDownElement.firstChild) 
 	{
-    	trinketDropDownElement.removeChild(trinketDropDownElement.firstChild);
+    	traitDropDownElement.removeChild(traitDropDownElement.firstChild);
 	}
 
 }
@@ -373,15 +429,15 @@ function updateTrinketText(click)
 
 function addIlvlDropdown(parentDiv)
 {
-	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/"+ "trinkets_DA_C" + ".json" , function(data) {
+	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/traits_DA_C.json" , function(data) {
 		let sortedItems = [];
 		let regExp = new RegExp("[0-9]+", "g"); //Accounts for all 2 digit numbers
 		let tempNumber = regExp.exec(parentDiv.id); // Pulls the number out of the parent div so we don't accidently create the wrong ilvl dropdown
-		trinketDiv = document.getElementById('trinketbtn' + tempNumber);
-		trinketName = trinketDiv.firstChild.nodeValue;
+		traitDiv = document.getElementById('traitbtn' + tempNumber);
+		traitName = traitDiv.firstChild.nodeValue;
 		ilvlDrop = parentDiv.parentElement.childNodes[4];
 		var keys = [];
-		for(var k in data["data"][trinketName]) keys.push(k); //Pull all item levels of the trinket.
+		for(var k in data["data"][traitName]) keys.push(k); //Pull all item levels of the trait.
 		for( k of keys)
 		{
 			let newIlvl = document.createElement("p");
@@ -393,7 +449,7 @@ function addIlvlDropdown(parentDiv)
 			ilvlDrop.appendChild(newIlvl);
 		}
 		
-		//let trinketDrop = document.getElementById(trinketID);
+		//let traitDrop = document.getElementById(traitID);
 		ilvlDrop.classList.toggle("show");
 		
 
@@ -413,8 +469,8 @@ function updateIlvlText(click)
 	chart = document.getElementById("chart-div");
 	if (chart.classList.contains('chart-div-show') == false)
 		chart.classList.toggle("chart-div-show");
-	trinketName = ilvlDropDownParent.childNodes[0].childNodes[0].nodeValue
-	addTrinketToChart();
+	traitName = ilvlDropDownParent.childNodes[0].childNodes[0].nodeValue
+	addtraitToChart();
 
 
 	//Remove all the ilvls.
@@ -465,7 +521,7 @@ function getFightSetup()
 		return "D";
 }
 
-function addTrinketToChart()
+function addtraitToChart()
 {
 	talentChoice = getTalentSetup();
 	if (talentChoice == undefined)
@@ -479,24 +535,24 @@ function addTrinketToChart()
 	}
 	console.log(talentChoice + '-' + fightChoice)
 
-	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/trinkets_" + talentChoice + "_" + fightChoice + ".json" , function(data) {
+	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/traits_" + talentChoice + "_" + fightChoice + ".json" , function(data) {
 		let chartItems = [];		
 		let graphData = [];
 		for (var i = 0; i < number; i++)
 		{
-			let trinketDiv = document.getElementById("trinket-div"+i)
-			let trinketName = trinketDiv.childNodes[0].childNodes[0].nodeValue;
-			let trinketIlvl = trinketDiv.childNodes[3].childNodes[0].nodeValue;
+			let traitDiv = document.getElementById("trait-div"+i)
+			let traitName = traitDiv.childNodes[0].childNodes[0].nodeValue;
+			let traitIlvl = traitDiv.childNodes[3].childNodes[0].nodeValue;
 			let baseDPS = data["data"]["Base"]["300"];
 
-			if (trinketName != "Select Trinket" && trinketIlvl != "Select Item Level")
+			if (traitName != "Select trait" && traitIlvl != "Select Item Level")
 			{
-				trinketDPS = data["data"][trinketName][trinketIlvl]
-				trinketDPS -= baseDPS
-				chartItems.push(trinketName);
+				traitDPS = data["data"][traitName][traitIlvl]
+				traitDPS -= baseDPS
+				chartItems.push(traitName);
 				graphData.push({
-					name: trinketName + ' - ' + trinketIlvl, 
-					data: [trinketDPS]});
+					name: traitName + ' - ' + traitIlvl, 
+					data: [traitDPS]});
 			}	
 		}
 		renderChart(graphData, chartItems);
@@ -522,7 +578,7 @@ function renderChart(graphData, chartItems)
 	            color: default_font_color,
 	            fontWeight: 'bold'
             },
-	        text: 'Trinket Comparison -' + talentSetup + ' - ' + fightSetup
+	        text: 'trait Comparison -' + talentSetup + ' - ' + fightSetup
 	    },
 	    plotOptions: {
 	        bar: {
@@ -598,7 +654,7 @@ function renderChart(graphData, chartItems)
 	        x: 0,
 	        y: 0,
 	        title: {
-	            text: "Trinket Name",
+	            text: "trait Name",
 	            style:
 	                {
 	                color:light_color,
