@@ -6,6 +6,9 @@ const light_color = "#eeeeee";
 const medium_color = "#999999";
 const dark_color = "#343a40";
 
+const light_blue = '#05B8CC'
+const green = '#00b200'
+
 const ilevel_color_table = {
 /*
 "300": "#1abc9c", 
@@ -539,26 +542,32 @@ function addtraitToChart()
 		}
 			graphData.push({
 				name: [secondarydpsName[0]],
-				data: [secondarydpsData[0],0,0]
+				data: [secondarydpsData[0],0,0],
+				color: light_blue
 			}, {
 				name: [primarydpsName[0]],
-				data: [primarydpsData[0],0,0]
+				data: [primarydpsData[0],0,0],
+				color: green
 			})
 
 			graphData.push({
 				name: [secondarydpsName[1]],
-				data: [0,secondarydpsData[1],0]
+				data: [0,secondarydpsData[1],0],
+				color: light_blue
 			}, {
 				name: [primarydpsName[1]],
-				data: [0, primarydpsData[1],0]
+				data: [0, primarydpsData[1],0],
+				color: green
 			})
 
 			graphData.push({
 				name: [secondarydpsName[2]],
-				data: [0,0,secondarydpsData[2]]
+				data: [0,0,secondarydpsData[2]],
+				color: light_blue
 			}, {
 				name: [primarydpsName[2]],
-				data: [0,0,primarydpsData[2]]
+				data: [0,0,primarydpsData[2]],
+				color: green
 			})
 
 

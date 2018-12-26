@@ -6,6 +6,12 @@ const light_color = "#eeeeee";
 const medium_color = "#999999";
 const dark_color = "#343a40";
 
+const trinketColors = [
+	'#F26D21', //coral
+	'#107896', //alice
+	'#EBC944' //daisy
+]
+
 const ilevel_color_table = {
 /*
 "300": "#1abc9c", 
@@ -496,7 +502,9 @@ function addTrinketToChart()
 				chartItems.push(trinketName);
 				graphData.push({
 					name: trinketName + ' - ' + trinketIlvl, 
-					data: [trinketDPS]});
+					data: [trinketDPS],
+					color: trinketColors[i]
+				});
 			}	
 		}
 		renderChart(graphData, chartItems);

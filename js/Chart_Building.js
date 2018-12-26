@@ -33,6 +33,56 @@ const ilevel_color_table = {
 */
 };
 
+const primary_azerite_traits = [
+	'Apothecarys Concoctions',
+	'Archive of the Titans',
+	'Barrage Of Many Bombs',
+	'Battlefield Focus',
+	'Blightborne Infusion',
+	'Blood Rite',
+	'Champion of Azeroth',
+	'Chorus of Insanity',
+	'Collective Will',
+	'Combined Might',
+	'Dagger in the Back Behind',
+	'Dagger in the Back Front',
+	'Death Throes',
+	'Filthy Transfusion',
+	'Glory in Battle',
+	'Incite the Pack',
+	'Laser Matrix',
+	'Meticulous Scheming',
+	'Relational Normalization Gizmo',
+	'Retaliatory Fury',
+	'Rezans Fury',
+	'Ricocheting Inflatable Pyrosaw',
+	'Ruinous Bolt',
+	'Searing Dialogue',
+	'Secrets of the Deep',
+	'Shadow of Elune',
+	'Spiteful Apparitions',
+	'Swirling Sands',
+	'Sylvanas Resolve',
+	'Synaptic Spark Capacitor',
+	'Thought Harvester',
+	'Thunderous Blast',
+	'Tidal Surge',
+	'Tradewinds',
+	'Unstable Catalyst',
+	'Whispers of the Damned'
+]
+
+const secondary_azerite_traits = [
+	'Azerite Globules', 
+	'Blood Siphon', 
+	'Earthlink',
+	'Elemental Whirl', 
+	'Gutripper',
+	'Heed My Call',
+	'On My Way', 
+	'Overwhelming Power', 
+	'Unstable Flames'
+]
 
 var WCP_Chart = function WCP_Chart(id, options) {
     this.chartId = id;
