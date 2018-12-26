@@ -484,7 +484,7 @@ function addTrinketToChart()
 				trinketDPS -= baseDPS
 				chartItems.push(trinketName);
 				graphData.push({
-					name: trinketName, 
+					name: trinketName + ' - ' + trinketIlvl, 
 					data: [trinketDPS]});
 			}	
 		}
@@ -517,7 +517,7 @@ function renderChart(graphData, chartItems)
 	        bar: {
 	            dataLabels: {
 	                align: 'right',
-	                enabled: false,
+	                enabled: true,
 	                pointFormat: "Value: {point.y:,.0f} mm"
 	            },
 	            enableMouseTracking: true,
