@@ -77,8 +77,7 @@ const secondary_azerite_traits = [
 	'Earthlink',
 	'Elemental Whirl', 
 	'Gutripper',
-	'Heed My Call', 
-	'Lifespeed',
+	'Heed My Call',
 	'On My Way', 
 	'Overwhelming Power', 
 	'Unstable Flames'
@@ -514,27 +513,56 @@ function addtraitToChart()
 	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/traits_" + talentChoice + "_" + fightChoice + ".json" , function(data) {
 		let chartItems = [];		
 		let graphData = [];
+		let primarydpsData = [0,0,0];
+		let secondarydpsData = [0,0,0];
+		let primarydpsName = ["","",""];
+		let secondarydpsName = ["","",""];
 		for (var i = 0; i < number; i++)
 		{
 			let traitDiv = document.getElementById("trait-div"+i)
 			let traitName = traitDiv.childNodes[0].childNodes[0].nodeValue;
 			let traitIlvl = traitDiv.childNodes[3].childNodes[0].nodeValue;
 			let baseDPS = data["data"]["Base"]["1_stack"];
-
 			if (traitName != "Select Primary trait" && traitIlvl != "Select Secondary Trait")
 			{
+				
 				primarytraitDPS = data["data"][traitName]['1_stack']
 				secondarytraitDPS = data["data"][traitIlvl]['1_stack']
-				console.log(primarytraitDPS);
-				console.log(secondarytraitDPS);
 				primarytraitDPS -= baseDPS;
 				secondarytraitDPS -= baseDPS;
 				chartItems.push(traitName);
-				graphData.push({
-					name: [traitName, traitIlvl], // + ' - ' + traitIlvl, 
-					data: [primarytraitDPS, secondarytraitDPS]});
+				primarydpsData[i] = primarytraitDPS;
+				secondarydpsData[i] = secondarytraitDPS;
+				primarydpsName[i] = traitName;
+				secondarydpsName[i] = traitIlvl;
 			}	
 		}
+			graphData.push({
+				name: [secondarydpsName[0]],
+				data: [secondarydpsData[0],0,0]
+			}, {
+				name: [primarydpsName[0]],
+				data: [primarydpsData[0],0,0]
+			})
+
+			graphData.push({
+				name: [secondarydpsName[1]],
+				data: [0,secondarydpsData[1],0]
+			}, {
+				name: [primarydpsName[1]],
+				data: [0, primarydpsData[1],0]
+			})
+
+			graphData.push({
+				name: [secondarydpsName[2]],
+				data: [0,0,secondarydpsData[2]]
+			}, {
+				name: [primarydpsName[2]],
+				data: [0,0,primarydpsData[2]]
+			})
+
+
+
 		renderChart(graphData, chartItems);
 		}.bind(this)).fail(function(){
 		console.log("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
@@ -558,10 +586,11 @@ function renderChart(graphData, chartItems)
 	            color: default_font_color,
 	            fontWeight: 'bold'
             },
-	        text: 'trait Comparison -' + talentSetup + ' - ' + fightSetup
+	        text: 'Trait Comparison -' + talentSetup + ' - ' + fightSetup
 	    },
 	    plotOptions: {
 	        bar: {
+	        	stacking: 'normal',
 	            dataLabels: {
 	                align: 'right',
 	                enabled: true,
@@ -579,7 +608,7 @@ function renderChart(graphData, chartItems)
 	            }
     	},
 	    xAxis: {
-	    	categories: ['Primary', 'Secondary'],
+	    	categories:['Trait Combo 1', 'Trait Combo 2', 'Trait Combo 3'],
 	        labels: {
 	        	useHTML: false,
 	            style: {
@@ -634,7 +663,7 @@ function renderChart(graphData, chartItems)
 	        x: 0,
 	        y: 0,
 	        title: {
-	            text: "trait Name",
+	            text: "Trait Name",
 	            style:
 	                {
 	                color:light_color,
@@ -648,7 +677,7 @@ function renderChart(graphData, chartItems)
 	    },
 	    series: $.each(graphData, function(i, chartD) {
         return chartD;
-    })
+    	})
 	});
 
 	document.getElementById("chart-div").style.height = 200 + chartItems.length * 30 + "px";
