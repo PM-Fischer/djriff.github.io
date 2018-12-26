@@ -33,6 +33,7 @@ const ilevel_color_table = {
 };
 
 const primary_azerite_traits = [
+	'Apothecarys Concoctions',
 	'Archive of the Titans',
 	'Barrage Of Many Bombs',
 	'Battlefield Focus',
@@ -50,7 +51,6 @@ const primary_azerite_traits = [
 	'Incite the Pack',
 	'Laser Matrix',
 	'Meticulous Scheming',
-	'On My Way',
 	'Relational Normalization Gizmo',
 	'Retaliatory Fury',
 	'Rezans Fury',
@@ -58,6 +58,7 @@ const primary_azerite_traits = [
 	'Ruinous Bolt',
 	'Searing Dialogue',
 	'Secrets of the Deep',
+	'Shadow of Elune',
 	'Spiteful Apparitions',
 	'Swirling Sands',
 	'Sylvanas Resolve',
@@ -257,7 +258,7 @@ function updateTraitText(click)
 	newtraitBtn.nodeValue = click;
 	let ilvlText = traitDropDownParent.childNodes[3].childNodes[0];
 	ilvlText.nodeValue = "Select Item Level";
-	//addIlvlDropdown(traitDropDownParent);
+	//addSecondaryTrait(traitDropDownParent);
 
 	//Remove all the traits.
 	while (traitDropDownElement.firstChild) 
@@ -278,9 +279,9 @@ function generatetraitMenu(number){
 	var traitBtn = document.createElement("button");
 	traitBtn.setAttribute("id", "traitbtn" + number);
 	traitBtn.setAttribute("class","dropbtn");
-	traitBtn.setAttribute("onclick", "displaytraits(this)");
+	traitBtn.setAttribute("onclick", "displayPrimaryTraits(this)");
 
-	var traitText = document.createTextNode("Select trait");
+	var traitText = document.createTextNode("Select Primary Trait");
 	traitBtn.appendChild(traitText);
 	traitDiv.appendChild(traitBtn);
 
@@ -305,9 +306,9 @@ function generateIlvlMenu(number){
 	var ilvlBtn = document.createElement("button");
 	ilvlBtn.setAttribute("id", "ilvlbtn" + number);
 	ilvlBtn.setAttribute("class","dropbtn");
-	ilvlBtn.setAttribute("onclick", "addIlvlDropdown(this)");
+	ilvlBtn.setAttribute("onclick", "addSecondaryTrait(this)");
 
-	var ilvlText = document.createTextNode("Select Item Level");
+	var ilvlText = document.createTextNode("Select Secondary Trait");
 	ilvlBtn.appendChild(ilvlText);
 
 	generatehorizontalSpacer(currtraitDiv);
@@ -373,37 +374,23 @@ addtraitDiv.appendChild(addtrait);
 
 
 
-function displaytraits(traitID)
+function displayPrimaryTraits(traitID)
 {
-	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/traits_DA_C.json" , function(data) {
-		let sortedItems = [];
-		let dpsSortedData = data["sorted_data_keys"];
-		console.log(dpsSortedData);
-		dpsSortedData = dpsSortedData.sort();
 		let traitDrop = traitID.parentElement.childNodes[1];
 		let traitDropDown = traitID.parentElement.childNodes[0];
-		for (d of dpsSortedData)
-		{
-			if (d in primary_azerite_traits)
-			{	
-				let newtrait = document.createElement("p");
-				newtrait.setAttribute("id", d);
-				newtrait.setAttribute("class", "dropdown-content");
-				newtrait.setAttribute("onclick", "updateTraitText(this.id)");
-				let newtraitText = document.createTextNode(d);
-				newtrait.appendChild(newtraitText);
-				traitDrop.appendChild(newtrait);
-			}
+		for (p of primary_azerite_traits)
+		{	
+			let newtrait = document.createElement("p");
+			newtrait.setAttribute("id", p);
+			newtrait.setAttribute("class", "dropdown-content");
+			newtrait.setAttribute("onclick", "updateTraitText(this.id)");
+			let newtraitText = document.createTextNode(p);
+			newtrait.appendChild(newtraitText);
+			traitDrop.appendChild(newtrait);
 		}
-		
+
 		//let traitDrop = document.getElementById(traitID);
 		traitDrop.classList.toggle("show");
-		
-
-		}.bind(this)).fail(function(){
-		console.log("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
-		alert("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
-	});
 }
 
 
@@ -415,8 +402,8 @@ function updateTraitText(click)
 	let newtraitBtn = traitDropDownParent.childNodes[0].childNodes[0];
 	newtraitBtn.nodeValue = click;
 	let ilvlText = traitDropDownParent.childNodes[3].childNodes[0];
-	ilvlText.nodeValue = "Select Item Level";
-	//addIlvlDropdown(traitDropDownParent);
+	ilvlText.nodeValue = "Select Secondary Trait";
+	//addSecondaryTrait(traitDropDownParent);
 
 	//Remove all the traits.
 	while (traitDropDownElement.firstChild) 
@@ -427,36 +414,26 @@ function updateTraitText(click)
 }
 
 
-function addIlvlDropdown(parentDiv)
+function addSecondaryTrait(parentDiv)
 {
-	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/traits_DA_C.json" , function(data) {
-		let sortedItems = [];
 		let regExp = new RegExp("[0-9]+", "g"); //Accounts for all 2 digit numbers
 		let tempNumber = regExp.exec(parentDiv.id); // Pulls the number out of the parent div so we don't accidently create the wrong ilvl dropdown
 		traitDiv = document.getElementById('traitbtn' + tempNumber);
 		traitName = traitDiv.firstChild.nodeValue;
 		ilvlDrop = parentDiv.parentElement.childNodes[4];
-		var keys = [];
-		for(var k in data["data"][traitName]) keys.push(k); //Pull all item levels of the trait.
-		for( k of keys)
+		for( s of secondary_azerite_traits)
 		{
 			let newIlvl = document.createElement("p");
-			newIlvl.setAttribute("id", k)
+			newIlvl.setAttribute("id", s)
 			newIlvl.setAttribute("class","dropdown-content");
 			newIlvl.setAttribute("onclick", "updateIlvlText(this.id)");
-			let newIlvlText = document.createTextNode(k);
+			let newIlvlText = document.createTextNode(s);
 			newIlvl.appendChild(newIlvlText);
 			ilvlDrop.appendChild(newIlvl);
 		}
 		
 		//let traitDrop = document.getElementById(traitID);
 		ilvlDrop.classList.toggle("show");
-		
-
-		}.bind(this)).fail(function(){
-		console.log("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
-		alert("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
-	});
 }
 
 function updateIlvlText(click)
@@ -465,7 +442,7 @@ function updateIlvlText(click)
 	let ilvlDropDownParent = ilvlDropDownElement.parentElement;
 	let newilvlBtn = ilvlDropDownParent.childNodes[3].childNodes[0];
 	newilvlBtn.nodeValue = click;
-	addIlvlDropdown(ilvlDropDownParent);
+	addSecondaryTrait(ilvlDropDownParent);
 	chart = document.getElementById("chart-div");
 	if (chart.classList.contains('chart-div-show') == false)
 		chart.classList.toggle("chart-div-show");
@@ -533,7 +510,6 @@ function addtraitToChart()
 	{
 		fightChoice = "C";
 	}
-	console.log(talentChoice + '-' + fightChoice)
 
 	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/traits_" + talentChoice + "_" + fightChoice + ".json" , function(data) {
 		let chartItems = [];		
@@ -543,16 +519,20 @@ function addtraitToChart()
 			let traitDiv = document.getElementById("trait-div"+i)
 			let traitName = traitDiv.childNodes[0].childNodes[0].nodeValue;
 			let traitIlvl = traitDiv.childNodes[3].childNodes[0].nodeValue;
-			let baseDPS = data["data"]["Base"]["300"];
+			let baseDPS = data["data"]["Base"]["1_stack"];
 
-			if (traitName != "Select trait" && traitIlvl != "Select Item Level")
+			if (traitName != "Select Primary trait" && traitIlvl != "Select Secondary Trait")
 			{
-				traitDPS = data["data"][traitName][traitIlvl]
-				traitDPS -= baseDPS
+				primarytraitDPS = data["data"][traitName]['1_stack']
+				secondarytraitDPS = data["data"][traitIlvl]['1_stack']
+				console.log(primarytraitDPS);
+				console.log(secondarytraitDPS);
+				primarytraitDPS -= baseDPS;
+				secondarytraitDPS -= baseDPS;
 				chartItems.push(traitName);
 				graphData.push({
-					name: traitName + ' - ' + traitIlvl, 
-					data: [traitDPS]});
+					name: [traitName, traitIlvl], // + ' - ' + traitIlvl, 
+					data: [primarytraitDPS, secondarytraitDPS]});
 			}	
 		}
 		renderChart(graphData, chartItems);
@@ -599,7 +579,7 @@ function renderChart(graphData, chartItems)
 	            }
     	},
 	    xAxis: {
-	    	categories: [''],
+	    	categories: ['Primary', 'Secondary'],
 	        labels: {
 	        	useHTML: false,
 	            style: {
