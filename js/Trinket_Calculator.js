@@ -63,7 +63,7 @@ generatehorizontalSpacer(externalLinks);
 var traitCalc = document.createElement("BUTTON");
 traitCalc.setAttribute("id", "trait-trait-btn");
 traitCalc.setAttribute("class", "dropbtn");
-traitCalc.setAttribute("onClick", "location.href='Trait_Calc.html'");
+traitCalc.setAttribute("onClick", "location.href='trait_calc.html'");
 var traitCalcText = document.createTextNode("Trait Calculator");
 traitCalc.appendChild(traitCalcText)
 externalLinks.appendChild(traitCalc);

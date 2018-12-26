@@ -116,7 +116,7 @@ generatehorizontalSpacer(externalLinks);
 var trinketCalc = document.createElement("BUTTON");
 trinketCalc.setAttribute("id", "trinket-trait-btn");
 trinketCalc.setAttribute("class", "dropbtn");
-trinketCalc.setAttribute("onClick", "location.href='Trinket_Calc.html'");
+trinketCalc.setAttribute("onClick", "location.href='trinket_calc.html'");
 var trinketCalcText = document.createTextNode("Trinket Calculator");
 trinketCalc.appendChild(trinketCalcText)
 externalLinks.appendChild(trinketCalc);
