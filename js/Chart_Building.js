@@ -425,8 +425,8 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 		for (dpsName of traitSelect)
 		{
 			chartLink = "";
-			truncatedName = dpsName.trim()
-			spellID = data["spell_ids"][dpsName];
+			dpsName = dpsName.trim()
+			spellID = data["spell_ids"][dpsName+' '];
 			chartLink = "";
 			chartLink += "<div style=\"display:inline-block; margin-bottom:-3px\">";
 			chartLink += "<a style=\"color: white; font-size: 16px; padding: 3px; cursor: default\" href=#";
@@ -434,14 +434,15 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 			chartLink += " rel=\"https://www.wowhead.com/spell=";
 			chartLink += spellID;
 			chartLink += "/"
-			chartLink += dpsName.trim().replace(/ /g,'-');
+			chartLink += dpsName.replace(/ /g,'-');
 			chartLink += "\" target=\"blank\"";
 			chartLink += " class=\"chart_link\"";
 			chartLink += ">";
-			chartLink += dpsName.trim();
+			chartLink += dpsName;
 			chartLink += "</a>";
 			chartLink += "</div>";
 			//Push link into array
+			console.log(chartLink);
 			wowheadTooltipsTraits.push(chartLink);
 		}
 		while (this.chart.series.length > 0){
