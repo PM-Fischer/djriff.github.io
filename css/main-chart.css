@@ -1,3 +1,8 @@
+.body {
+  display: flex;
+  position: relative;
+}
+
 /* Main Div */
 .main {
   width: 100%;
@@ -52,13 +57,15 @@
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
   display: none;
-  position: absolute;
-  background-color: #f1f1f1;
+  position: relative;
   min-width: 80px;
   min-height: 10px;
   z-index: 1;
   cursor: pointer;
   font-size: 0px;
+  text-align: center;
+  padding-bottom: 5px;
+  padding-right: 5px;
 }
 
 /* Links inside the dropdown */
@@ -78,7 +85,12 @@
 .dropdown-content p:hover {background-color: #ddd}
 
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show {display:inline-block;}
+.show {
+  display:block;
+  justify-content: center;
+  text-align: center;
+  font-size: 16px;
+}
 
 .chart-div {
   display: none;

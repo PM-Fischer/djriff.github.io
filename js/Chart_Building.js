@@ -384,8 +384,45 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
 		let sortedItems = [];
 		let dpsSortedData = data["sorted_data_keys"];
+		//Check if the traits are primary or secondary and adjust the graph accordingly
+		let traitSelect = [];
+		if (traits == 'P')
+			{
+				for (dpsName of dpsSortedData)
+				{
+
+					dpsName = dpsName.trim();
+
+					for(p of primary_azerite_traits)
+					{
+						if (dpsName == p)
+						{
+							traitSelect.push(dpsName);
+						}
+					}
+				}
+			}
+		else 
+		{
+			{
+				
+				for (dpsName of dpsSortedData)
+				{
+					dpsName = dpsName.trim();
+					for(s of secondary_azerite_traits)
+					{
+
+						if (dpsName == s)
+						{
+							traitSelect.push(dpsName);
+						}
+					}
+				}
+			}
+		}
+
 		var wowheadTooltipsTraits = [];
-		for (dpsName of dpsSortedData)
+		for (dpsName of traitSelect)
 		{
 			chartLink = "";
 			truncatedName = dpsName.trim()
@@ -487,7 +524,7 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 			let maxItemLevel = data["simulated_steps"][0].split("_")[1];
 			let stackName = stackCount + "_" + maxItemLevel;
 			let itemLevelDpsValues = [];
-			for(sortedData of dpsSortedData)
+			for(sortedData of traitSelect)
 				{
 
 					sortedData = sortedData.trim();
@@ -531,7 +568,7 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 				showInLegend: true
 			}, false);
 		}
-		document.getElementById(this.chartId).style.height = 200 + dpsSortedData.length * 30 + "px";
+		document.getElementById(this.chartId).style.height = 200 + traitSelect.length * 30 + "px";
 		this.chart.setSize(document.getElementById(this.chartId).style.width, document.getElementById(this.chartId).style.height);
 		//this.chart.renderTo(this.chartId);
 		this.chart.redraw();
@@ -691,6 +728,30 @@ var TraitText = document.createTextNode("Azerite Trait");
 TraitBtn.appendChild(TraitText);
 TrinketTraitDiv.appendChild(TraitBtn)
 
+//Primary and Secondary Traits
+var traitButtons = document.createElement("div");
+traitButtons.setAttribute("id", "traitButtons");
+traitButtons.setAttribute("class", "dropdown-content")
+
+
+var primaryTrait = document.createElement("BUTTON");
+primaryTrait.setAttribute("id", "primary");
+primaryTrait.setAttribute("class", "button");
+primaryTrait.setAttribute("onClick", "itemClick('Traits-P')")
+var primaryTraitText = document.createTextNode("Primary Traits");
+primaryTrait.appendChild(primaryTraitText);
+traitButtons.appendChild(primaryTrait);
+
+generatehorizontalSpacer(traitButtons);
+
+var secondaryTrait = document.createElement("BUTTON");
+secondaryTrait.setAttribute("id", "secondary");
+secondaryTrait.setAttribute("class", "button");
+secondaryTrait.setAttribute("onClick", "itemClick('Traits-S')")
+var secondaryTraitText = document.createTextNode("Secondary Traits");
+secondaryTrait.appendChild(secondaryTraitText);
+traitButtons.appendChild(secondaryTrait);
+document.body.appendChild(traitButtons);
 
 //Fight Style div's
 var fightStyleDiv = document.createElement("div");
@@ -735,12 +796,14 @@ fightStyleDiv.appendChild(dungeonBtn)
 
 
 
+
+
 //Set vars for btns
 var btnGroup = document.getElementsByClassName("button");
 var talentsBtn = 'DA';
 var itemBtn = 'Trinkets';
 var fightBtn = 'C';
-
+var traits = 'P';
 
 function talentClick(clicked)
 {
@@ -749,11 +812,9 @@ function talentClick(clicked)
 	var talents = document.getElementById('talent-div').children;
 	for(i = 0; i< talents.length; i++)
 	{
-		console.log(talents[i].id);
 		if (talents[i].id.toLowerCase() == clickedID.toLowerCase())
 		{
 			talents[i].style.borderColor = '#DDA0DD';
-			console.log("match")
 		}
 		else
 		{
@@ -764,13 +825,21 @@ function talentClick(clicked)
 
 function itemClick(clicked)
 {
-	itemBtn = clicked;
+	if (clicked == 'Traits-P' || clicked == 'Traits-S')
+	{
+		itemBtn = 'Traits'
+		traits = clicked.split("-")[1];
+	}
+
+	else 
+	{
+		itemBtn = clicked;
+	}
+
 	clickedID = clicked + 'Btn';
-	console.log(clickedID);
 	var trinketTraits = document.getElementById('Trinket-Trait-div').children;
 	for(i = 0; i< trinketTraits.length; i++)
 	{
-		console.log(trinketTraits[i].id);
 		if (trinketTraits[i].id.toLowerCase() == clickedID.toLowerCase())
 		{
 			trinketTraits[i].style.borderColor = '#DDA0DD';
@@ -780,6 +849,7 @@ function itemClick(clicked)
 			trinketTraits[i].style.borderColor = 'white';
 		}
 	}
+	
 }
 
 function fightClick(clicked)
@@ -789,7 +859,6 @@ function fightClick(clicked)
 	var fight = document.getElementById('Fight-Style-div').children;
 	for(i = 0; i< fight.length; i++)
 	{
-		console.log(fight[i].id);
 		if (fight[i].id.toLowerCase() == clickedID.toLowerCase())
 		{
 			fight[i].style.borderColor = '#DDA0DD';
@@ -803,15 +872,16 @@ function fightClick(clicked)
 
 for (var i = 0; i < btnGroup.length; i++)
 {
-
 	btnGroup[i].addEventListener("click",function(){
 		if (itemBtn == 'Trinkets')
 		{
 			wcp_charts.updateTrinketChart(talentsBtn+itemBtn+fightBtn);
+			traitButtons.classList.remove("show");
 		}
-		else
+		else if (itemBtn == 'Traits')
 		{
 			wcp_charts.updateTraitChart(talentsBtn+itemBtn+fightBtn);
+			traitButtons.classList.add("show");
 		}
 	})
 }
