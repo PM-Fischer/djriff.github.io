@@ -211,7 +211,7 @@ WCP_Chart.prototype.init = function() {
 
  
 WCP_Chart.prototype.updateTrinketChart = function(chartName) {
-	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
+	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/" + repoOption + "/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
 		var sortedItems = [];
 		var dpsSortedData = data["sorted_data_keys"];
 		var wowheadTooltips = [];
@@ -381,7 +381,7 @@ WCP_Chart.prototype.updateTrinketChart = function(chartName) {
 };
 
 WCP_Chart.prototype.updateTraitChart = function(chartName) {
-	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/master/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
+	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/" + repoOption + "/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
 		let sortedItems = [];
 		let dpsSortedData = data["sorted_data_keys"];
 		//Check if the traits are primary or secondary and adjust the graph accordingly
@@ -800,11 +800,26 @@ fightStyleDiv.appendChild(dungeonBtn)
 
 
 //Set vars for btns
+var repoOption = 'master'
 var btnGroup = document.getElementsByClassName("button");
 var talentsBtn = 'DA';
 var itemBtn = 'Trinkets';
 var fightBtn = 'C';
 var traits = 'P';
+
+document.addEventListener('DOMContentLoaded', function () {
+  var checkbox = document.querySelector('input[type="checkbox"]');
+
+  checkbox.addEventListener('change', function () {
+    if (checkbox.checked) {
+      repoOption = 'ptr'
+      console.log('Checked');
+    } else {
+      repoOption = 'master'
+      console.log('Not checked');
+    }
+  });
+});
 
 function talentClick(clicked)
 {
