@@ -211,7 +211,7 @@ WCP_Chart.prototype.init = function() {
 
  
 WCP_Chart.prototype.updateTrinketChart = function(chartName) {
-	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/" + repoOption + "/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
+	jQuery.getJSON("https://cdn.jsdelivr.net/gh/warcraftpriests/bfa-shadow-priest@" + repoOption + "/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
 		var sortedItems = [];
 		var dpsSortedData = data["sorted_data_keys"];
 		var wowheadTooltips = [];
@@ -374,14 +374,15 @@ WCP_Chart.prototype.updateTrinketChart = function(chartName) {
   				console.log(error);}
 		
 
-	}.bind(this)).fail(function(){
+	}.bind(this)).fail(function(xhr, status){
 		console.log("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
+		console.log(status);	
 		alert("The JSON chart failed to load, please let DJ know via discord Djriff#0001");
 	});
 };
 
 WCP_Chart.prototype.updateTraitChart = function(chartName) {
-	jQuery.getJSON("https://rawgit.com/WarcraftPriests/bfa-shadow-priest/" + repoOption + "/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
+	jQuery.getJSON("https://cdn.jsdelivr.net/gh/warcraftpriests/bfa-shadow-priest@" + repoOption + "/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
 		let sortedItems = [];
 		let dpsSortedData = data["sorted_data_keys"];
 		//Check if the traits are primary or secondary and adjust the graph accordingly
