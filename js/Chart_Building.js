@@ -382,6 +382,17 @@ WCP_Chart.prototype.updateTrinketChart = function(chartName) {
 };
 
 WCP_Chart.prototype.updateTraitChart = function(chartName) {
+	
+	let request = new XMLHttpRequest();
+    request.open("GET", "json/traits_DA_C.json", true)
+    console.log(request.readyState);
+    console.log(request.status);
+    if (request.readyState === 4) {
+    	if (request.status === 200) {
+    		let json = JSON.parse(request.responseText);
+    		console.log(json)
+    	}
+    }
 	jQuery.getJSON("https://cdn.jsdelivr.net/gh/warcraftpriests/bfa-shadow-priest@" + repoOption + "/json_Charts/"+ this.options.charts[chartName].src + ".json" , function(data) {
 		let sortedItems = [];
 		let dpsSortedData = data["sorted_data_keys"];
@@ -529,7 +540,7 @@ WCP_Chart.prototype.updateTraitChart = function(chartName) {
 			for(sortedData of traitSelect)
 				{
 
-					sortedData = sortedData.trim();
+					sortedData = sortedData.trim();	
 					
 					let dps = data["data"][sortedData][stackName];
 					let baselineDPS = data["data"]["Base"]["1_"+maxItemLevel];
