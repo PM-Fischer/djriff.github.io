@@ -384,7 +384,7 @@ WCP_Chart.prototype.updateTrinketChart = function(chartName) {
 WCP_Chart.prototype.updateTraitChart = function(chartName) {
 	
 	let request = new XMLHttpRequest();
-    request.open("GET", "json/traits_DA_C.json", true)
+    request.open("GET", "https://djriff.github.io/json/traits_DA_C.json", true)
     console.log(request.readyState);
     console.log(request.status);
     if (request.readyState === 4) {
