@@ -1,0 +1,48 @@
+{
+  "_embedded" : {
+    "classes" : [ {
+      "subject" : "Computer Science",
+      "classNumber" : null,
+      "_links" : {
+        "self" : {
+          "href" : "http://104.248.0.248/classes/1"
+        },
+        "klass" : {
+          "href" : "http://104.248.0.248/classes/1"
+        },
+        "sessionList" : {
+          "href" : "http://104.248.0.248/classes/1/sessionList"
+        }
+      }
+    }, {
+      "subject" : "hey dood",
+      "classNumber" : null,
+      "_links" : {
+        "self" : {
+          "href" : "http://104.248.0.248/classes/2"
+        },
+        "klass" : {
+          "href" : "http://104.248.0.248/classes/2"
+        },
+        "sessionList" : {
+          "href" : "http://104.248.0.248/classes/2/sessionList"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://104.248.0.248/classes{?page,size,sort}",
+      "templated" : true
+    },
+    "profile" : {
+      "href" : "http://104.248.0.248/profile/classes"
+    }
+  },
+  "page" : {
+    "size" : 20,
+    "totalElements" : 2,
+    "totalPages" : 1,
+    "number" : 0
+  }
+}
